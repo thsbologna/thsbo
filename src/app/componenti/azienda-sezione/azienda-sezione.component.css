@@ -1,0 +1,43 @@
+/**
+* Modifica lo stile del componente per un'ottimizzare la responsivita' con gli smartphone
+**/
+
+#chi-siamo {
+  padding-top: 80px;
+}
+
+#chi-siamo #section_image,
+#hardware #section_image {
+  order: 1;
+}
+
+#chi-siamo #section_text_container,
+#hardware #section_text_container {
+  order: -1;
+}
+
+#servizi #section_image,
+#software #section_image {
+  order: -1;
+}
+
+#servizi #section_text_container,
+#software #section_text_container {
+  order: 1;
+}
+
+@media screen and (max-width: 992px) {
+  #section_image,
+  #hardware #section_image,
+  #servizi #section_image,
+  #software #section_image {
+    order: 1;
+  }
+
+  #chi-siamo #section_text_container,
+  #hardware #section_text_container,
+  #servizi #section_text_container,
+  #software #section_text_container {
+    order: -1;
+  }
+}

@@ -1,0 +1,53 @@
+/**
+* Modifiche css per impostare l'header primeng fisso all'inizio della pagina e sempre visibile.
+* Modifiche css per impostare i pulsanti dell'header a destra, miglioramento resposivita'
+**/
+
+:host ::ng-deep .p-menubar {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100dvw;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 0;
+    border: none;
+}
+
+:host ::ng-deep .p-menubar .p-menubar-button {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transform: translateX(-50%) translateY(-140%);
+    width: 40px;
+    height: 40px;
+}
+
+:host ::ng-deep .p-menuitem-link{
+    border-radius: 0;
+}
+
+:host ::ng-deep .p-menubar .p-menubar-button svg {
+    width: 25px;
+    height: 25px;
+}
+
+#logo {
+    cursor: pointer;
+}
+
+@media screen and (min-width: 960px) {
+    :host ::ng-deep .p-menubar-root-list>li:last-child .p-submenu-list {
+        right: 0;
+    }
+
+    :host ::ng-deep .p-menubar .p-menubar-root-list {
+        position: absolute;
+        right: 0;
+        top: calc(100% - 12px);
+        transform: translateX(-5%) translateY(-115%);
+    }
+}

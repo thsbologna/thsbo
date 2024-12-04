@@ -1,0 +1,58 @@
+:host ::ng-deep .p-carousel {
+  width: 100%;
+  height: 100dvh;
+  background-image: url("/images/carousel/carousel_bg.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.carousel_item {
+  height: calc(100dvh - 50px);
+}
+
+img {
+  width: max-content;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+img,
+p {
+  opacity: 0;
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+h1 {
+  transform: translateX(-100%);
+}
+
+img {
+  transform: scale(0.8);
+}
+
+.visible img {
+  transform: scale(1);
+}
+
+p {
+  transform: translateX(100%);
+}
+
+@media screen and (max-width: 1368px) {
+  img {
+    width: 30vh;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  img {
+    width: 30vh;
+  }
+}

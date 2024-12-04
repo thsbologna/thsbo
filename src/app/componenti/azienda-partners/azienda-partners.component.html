@@ -1,0 +1,14 @@
+<section aria-labelledby="partners-title" id="partners" class="pt-8 flex flex-column align-items-center">
+    <h1 class="block text-6xl text-center font-bold mb-6">Partners</h1>
+    <div class="slider">
+        <div class="slider-items">
+            @for (p of partners; track $index) {
+            <app-azienda-collaboratore class="card w-15rem" [collaboratore]="p" />
+            }
+
+            @for (p of partners; track $index) {
+            <app-azienda-collaboratore class="card" [collaboratore]="p" />
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,26 @@
+[
+    {
+      "id": 1,
+      "immagine": "/images/carousel/esperienza_e_affidabilita.gif",
+      "titolo": "Esperienza e affidabilità",
+      "descrizione": "TH&S Bologna vanta oltre 30 anni di esperienza nel settore informatico. Offriamo soluzioni su misura per hardware, software eassistenza, garantendo ai nostri partner un supporto affidabile e continuativo per ogni esigenza IT."
+    },
+    {
+      "id": 2,
+      "immagine": "/images/carousel/soluzioni_integrate_e_personalizzate.gif",
+      "titolo": "Soluzioni integrate e personalizzate",
+      "descrizione": "Specializzati nello sviluppo di software ERP e soluzioni open source, ci distinguiamo per la capacità di integrare perfettamente hardware e software. Il nostro approccio sartoriale assicura soluzioni informatiche completamente adattate alle specifiche necessità di ogni azienda."
+    },
+    {
+      "id": 3,
+      "immagine": "/images/carousel/innovazione_e_assistenza_continua.gif",
+      "titolo": "Innovazione e assistenza continua",
+      "descrizione": "In un settore in rapida evoluzione come l'informatica, TH&S Bologna si impegna a fornire tecnologie all'avanguardia e un'assistenza specializzata. Il nostro team di tecnici esperti è sempre a disposizione per garantire l'efficienza dei sistemi informatici dei nostri clienti."
+    },
+    {
+      "id": 4,
+      "immagine": "/images/carousel/partnership_di_valore.gif",
+      "titolo": "Partnership di valore",
+      "descrizione": "Collaboriamo strettamente con i nostri clienti, condividendo obiettivi e valori. Questo approccio ci permette di offrire un reale valore aggiunto, trasformandoci in un partner strategico per lo sviluppo tecnologico e il successo delle aziende che si affidano a noi."
+    }
+  ]

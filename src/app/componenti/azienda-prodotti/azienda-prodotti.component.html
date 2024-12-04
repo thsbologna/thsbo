@@ -1,0 +1,8 @@
+<section id="prodotti" class="surface-section px-4 pt-8 md:px-6 lg:px-8 text-center flex flex-column justify-content-center align-items-center">
+    <h1 class="block text-6xl font-bold mb-6">Prodotti</h1>
+    <div class="grid">
+        @for (p of prodotti; track $index) {
+        <app-azienda-prodotti-card [prodotto]="p" class="col-6 md:col-4 mb-4 px-5" />
+        }
+    </div>
+</section>

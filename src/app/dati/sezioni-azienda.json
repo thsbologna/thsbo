@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "cssId": "chi-siamo",
+      "titolo": "Chi Siamo",
+      "descrizione": "TH&S Bologna Srl si occupa di soluzioni informatiche per aziende ed assistenza hardware e software su installazioni effettuate presso la propria clientela; fornisce consulenza, controlli su apparecchiature di rete, stampanti, personal computer e server; produce software applicativi, per piccole e medie aziende, sviluppati con data base relazionale D3 (PICK), che variano dagli standard classici alle personalizzazioni piu’ accurate. Ed attualmente si è indirizzata anche nell’utilizzo di software Open Source su data base ORACLE e PostgreQL. Tutte le applicazioni prodotte possono essere eseguite su vari ambienti operativi Unix, Aix, Linux, Window. In particolar modo sono state realizzate applicazioni per aziende operanti nelle attività di macellazione, lavorazioni carni, vendita per corrispondenza, e gestione piattaforme per prodotti alimentari; con la possibilità di comunicazione con altri applicativi e svariate apparecchiature. Nel settore delle stampanti è attualmente distributore qualificato COMPUPRINT e TALLY GENICOM fornendo stampanti laser, ad impatto e bancarie; ricambi, consumabili, assistenza e riparazioni su tutta la gamma dei prodotti commercializzati.",
+      "immagine": "/images/company/chisiamo.png",
+      "altImmagine": "Chi siamo image",
+      "coloreSfondo": "bg-blue-500"
+    },
+    {
+      "id": 2,
+      "cssId": "servizi",
+      "titolo": "Servizi",
+      "descrizione": "La capacità di TH&S nel progettare soluzioni integrate tra software e hardware è la nostra garanzia della efficienza di qualsiasi sistema informatico, ma sono i servizi ad esso connessi che consentono di ottimizzarne le capacità operative. In questo contesto si collocano non solo l’assistenza e la consulenza sistemistica su hardware e software, sia tramite intervento diretto che on line, ma anche tutte quelle garanzie e modalità di pagamento personalizzate che consentono al cliente di poter sfruttare al meglio tutte le opportunità che la tecnologia gli offre. Questa assistenza viene garantita attraverso tecnici specializzati a disposizione dei clienti. L’innovativa formula ideata da TH&S è stata realizzata per soddisfare perfettamente tutte le esigenze di professionisti e aziende. La figura del “counselor informatico”, è un progetto in grado di trasformare le necessità del responsabile del sistema informatico aziendale in altrettanti servizi; sollevandolo da ogni dubbio e fornendogli la certezza di avere in TH&S un interlocutore affidabile.",
+      "immagine": "/images/company/servizi.png",
+      "altImmagine": "servizi image",
+      "coloreSfondo": "bg-red-600"
+    },
+    {
+      "id": 3,
+      "cssId": "hardware",
+      "titolo": "Hardware",
+      "descrizione": "TH&S offre sempre le migliori soluzioni hardware per rispondere alle esigenze specifiche di ogni azienda. Soluzioni studiate su misura per ottenere la massima compatibilità e affidabilità nella gestione delle informazioni. L’esperienza nell’affrontare le problematiche funzionali dei supporti informatici, la nostra capacità di cogliere le concrete necessità operative dei clienti, la nostra attenzione alla continua evoluzione del settore e la nostra partnership con le migliori marche produttrici di hardware garantiscono la qualità e la sicurezza delle nostre soluzioni. Lavorare efficacemente, per un imprenditore, significa potersi concentrare sul proprio corebusiness senza distrazioni legate alla funzionalità dei supporti fisici di: computer, server, stampanti, router e componenti di ogni genere, oppure alle varie possibilità connesse alla comunicazione e alla trasmissione di dati, per esempio attraverso una rete locale o tramite internet. A tutto questo pensa TH&S grazie anche alla affidabilità e alla qualità dei prodotti offerti.",
+      "immagine": "/images/company/hardware.png",
+      "altImmagine": "Hardware image",
+      "coloreSfondo": "bg-yellow-500"
+    },
+    {
+      "id": 4,
+      "cssId": "software",
+      "titolo": "Software",
+      "descrizione": "Ci piace pensare alla nostra società come ad una vera e propria realtà “sartoriale,” che trova e crea soluzioni “su misura.” Questo è reso possibile dal particolare rapporto che, da sempre, instauriamo con le nostre aziende clienti. Lo stretto contatto con il cliente, la condivisione dei suoi obiettivi e valori, oltre che un’attenzione particolare per lo spirito dell’impresa, ci rende certi di fornire un importante valore aggiunto per la loro attività, in termini di servizio e risultato. I nostri maggiori successi sono stati raggiunti realizzando un ERP dedicato alle industrie di trasformazione e della lavorazione carni, ma anche soluzioni nella logistica, nella vendita per corrispondenza, nella vendita o raccolta ordini on line, nella vendita immobiliare. La scelta di realizzare software open source potendolo adattare a qualsiasi database esistente rende le soluzioni di TH&S flessibili e sicure. Essere partner è molto di più che lavorare insieme. È l'impegno e la convinzione di far parte di uno stesso progetto per garantire un servizio ed un'assistenza specializzata e continua nel tempo.",
+      "immagine": "/images/company/software.png",
+      "altImmagine": "software image",
+      "coloreSfondo": "bg-green-700"
+    }
+  ]

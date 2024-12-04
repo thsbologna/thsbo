@@ -1,0 +1,19 @@
+@media (max-width: 768px) {
+    .p-card {
+        margin: 1rem;
+    }
+}
+
+:host ::ng-deep .p-card-content {
+    padding: 0;
+}
+
+:host ::ng-deep .p-chip-text {
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.prodotto-container {
+  min-height: calc(100dvh - 180px);
+}
+

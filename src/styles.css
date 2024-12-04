@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+/* Primeng */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+/* Primeicons */
+@import "primeicons/primeicons.css";
+
+* {
+  font-family:  Arial, Helvetica, sans-serif;
+  letter-spacing: 1.1px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}

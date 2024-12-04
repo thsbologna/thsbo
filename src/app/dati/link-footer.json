@@ -1,0 +1,22 @@
+[
+    {
+      "id": "1",
+      "icon": "pi pi-shop",
+      "routerLink": "/store"
+    },
+    {
+      "id": "2",
+      "icon": "pi pi-envelope",
+      "routerLink": "/contatti"
+    },
+    {
+      "id": "3",
+      "icon": "pi pi-phone",
+      "routerLink": "/contatti"
+    },
+    {
+      "id": "4",
+      "icon": "pi pi-linkedin",
+      "routerLink": "/shop/prodotti"
+    }
+  ]

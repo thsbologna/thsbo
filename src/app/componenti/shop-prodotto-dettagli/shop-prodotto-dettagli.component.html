@@ -1,0 +1,94 @@
+<section class="px-4">
+  <div class=" p-0 cursor-pointer w-max">
+    <p routerLink="/shop/prodotti" class="text-primary w-max">
+      <i class="pi pi-arrow-left"></i>
+      Torna ai prodotti
+    </p>
+  </div>
+
+  @if (prodotto) {
+  <div
+    class="prodotto-container mt-6 w-full flex md:flex-row flex-column justify-content-center md:align-items-start align-items-center gap-6"
+  >
+    <div>
+      <img
+        [src]="baseUrl + prodotto.immagine.url"
+        alt="Immagine prodotto"
+        class="product-image"
+        *ngIf="prodotto.immagine != null"
+      />
+      <img
+        src="/images/Image-not-found.png"
+        alt="Immagine prodotto"
+        class="product-image"
+        *ngIf="prodotto.immagine == null"
+      />
+    </div>
+
+    <div class="md:w-6">
+      <div class="flex justify-content-center md:justify-content-start">
+      <p-tag
+        [value]="prodotto.categoria?.nome"
+        severity="success"
+        [routerLink]="
+          '/shop/prodotti/categoria/' + prodotto.categoria!.nome + '/prodotti'
+        "
+        class="cursor-pointer capitalize"
+      />
+      </div>
+
+      <h1 class="text-center md:text-left block text-6xl font-bold mx-0 mt-2 mb-3">
+        {{ prodotto.nome }}
+      </h1>
+      <p class="line-height-3 mb-3 text-justify">{{ prodotto.descrizione }}</p>
+      <p class="block text-4xl mx-0 mt-2 mb-2">
+        Prezzo:
+        <span class="font-semibold">€ {{ prodotto.prezzo }}</span>
+      </p>
+      <p class="block mx-0 mt-2 mb-2">
+        Giorni di consegna: Da
+        <span class="font-semibold">{{ prodotto.giorniConsegnaMin }}</span> a
+        <span class="font-semibold">{{ prodotto.giorniConsegnaMax }}</span>
+        giorni lavorativi
+      </p>
+      <p class="block mx-0 mt-2">
+        Disponibilita':
+        <span class="font-semibold">{{ prodotto.disponibilita }}</span>
+      </p>
+      <button
+        pButton
+        type="button"
+        label="Aggiungi al carrello"
+        (click)="faiInviareMail($event)"
+        icon="pi pi-shopping-cart"
+        size="small"
+        class="md:w-auto w-full mt-2"
+      ></button>
+    </div>
+  </div>
+} @else {
+  <div class="surface-300 w-full h-full flex justify-content-center align-items-center" >
+    <p-progressSpinner />
+  </div>
+}
+
+  <p-confirmDialog
+    rejectVisible="false"
+    acceptLabel="Invia Email"
+    [style]="{ width: '450px' }"
+  >
+    <ng-template pTemplate="message" let-message>
+      <div
+        class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border"
+      >
+        <i class="pi pi-exclamation-circle text-6xl text-primary-500"></i>
+        <p>
+          Al momento il servizio di acquisto diretto dal sito non e'
+          disponibile. <br />
+          Per acquistare il prodotto si consiglia di contattare il servizio
+          clienti via mail cliccando il pulsante
+        </p>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
+</section>

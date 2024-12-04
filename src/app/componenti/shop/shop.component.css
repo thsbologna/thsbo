@@ -1,0 +1,7 @@
+:host ::ng-deep .p-megamenu {
+  background-color: white;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}

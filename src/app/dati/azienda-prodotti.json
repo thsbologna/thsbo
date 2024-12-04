@@ -1,0 +1,32 @@
+[
+    {
+      "id": 1,
+      "nome": "Software",
+      "icona": "undefined pi pi-code"
+    },
+    {
+      "id": 2,
+      "nome": "ERP",
+      "icona": "undefined pi pi-cog"
+    },
+    {
+      "id": 3,
+      "nome": "Stampanti e accessori",
+      "icona": "undefined pi pi-print"
+    },
+    {
+      "id": 4,
+      "nome": "Database",
+      "icona": "undefined pi pi-database"
+    },
+    {
+      "id": 5,
+      "nome": "Server",
+      "icona": "undefined pi pi-server"
+    },
+    {
+      "id": 6,
+      "nome": "Desktop",
+      "icona": "undefined pi pi-desktop"
+    }
+  ]

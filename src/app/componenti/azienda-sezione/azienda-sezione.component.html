@@ -1,0 +1,51 @@
+<section
+  [id]="sezione.cssId"
+  class="grid grid-nogutter surface-section text-900 w-full"
+>
+  @if (sezione.id % 2 == 0) {
+  <div
+    id="section_image"
+    class="col-12 lg:col-6 overflow-hidden flex justify-content-center align-items-center bg-white"
+    [classList]="'col-12 lg:col-6 overflow-hidden flex justify-content-center align-items-center '"
+  >
+    <img
+      title="immagine paragrafo"
+      [src]="sezione.immagine"
+      [alt]="sezione.altImmagine"
+      class="block lg:h-full"
+    />
+  </div>
+  }
+  <div
+    id="section_text_container"
+    [classList]="
+      'col-12 lg:col-6 p-6 text-justify flex align-items-center py-8 ' +
+      sezione.coloreSfondo
+    "
+  >
+    <div>
+      <span class="block text-6xl font-bold mb-1">{{ sezione.titolo }}</span>
+      @if (sezione.id != 3) {
+      <p class="mt-0 text-100 text-lg font-medium line-height-3">
+        {{ sezione.descrizione }}
+      </p>
+      } @else {
+      <p class="mt-0 text-900 text-lg font-medium line-height-3">
+        {{ sezione.descrizione }}
+      </p>
+      }
+    </div>
+  </div>
+  @if (sezione.id % 2 != 0 ) {
+  <div
+    [classList]="'col-12 lg:col-6 overflow-hidden flex justify-content-center align-items-center '"
+  >
+    <img
+      title="immagine paragrafo"
+      [src]="sezione.immagine"
+      [alt]="sezione.altImmagine"
+      class="block lg:h-full"
+    />
+  </div>
+  }
+</section>

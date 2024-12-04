@@ -1,0 +1,95 @@
+<section id="emailPrivato">
+    @if (formInviato) {
+    <div
+        class="fixed top-0 left-0 right-0 flex justify-content-center align-items-center w-screen h-screen loading_container z-1 surface-50 opacity-40">
+        <p-progressSpinner styleClass="w-3rem h-3rem" strokeWidth="5" fill="var(--surface-ground)"
+            animationDuration=".5s" />
+    </div>
+    }
+    <p-toast />
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" id="form" class="w-full flex flex-column ">
+        <div class="grid grid-nogutter w-full gap-3">
+            <div class="col field flex flex-column">
+                <input placeholder="Nome" type="text" pInputText id="nome" formControlName="nome" required autofocus />
+                <small *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid"
+                    class="p-error">
+                    Nome obbligatorio.
+                </small>
+            </div>
+
+            <div class="col field flex flex-column">
+                <input placeholder="Cognome" type="text" pInputText id="cognome" formControlName="cognome" required autofocus />
+                <small *ngIf="form.get('cognome')?.touched && form.get('cognome')?.invalid"
+                    class="p-error">
+                    Cogome obbligatorio.
+                </small>
+            </div>
+
+
+        </div>
+
+        <div class="field flex flex-column">
+            <input placeholder="Codice Fiscale" type="text" pInputText id="codiceFiscale" formControlName="codiceFiscale" required autofocus />
+            <small *ngIf="form.get('codiceFiscale')?.touched && form.get('codiceFiscale')?.invalid" class="p-error">
+                Il codice fiscale è obbligatorio.
+            </small>
+        </div>
+
+        <div class="field flex flex-column">
+            <input placeholder="Indirizzo Email" type="text" pInputText id="email" formControlName="indirizzoEmail" required autofocus />
+            <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="p-error">
+                L'indirizzo email è obbligatorio e deve essere valido.
+            </small>
+        </div>
+
+        <div class="grid grid-nogutter w-full gap-3">
+            <div class="col field flex flex-column">
+                <p-dropdown id="provincia" [options]="province" formControlName="provincia"
+                    class="block text-overflow-ellipsis" required placeholder="Selezionare provincia di residenza" />
+                <small *ngIf="form.get('provincia')?.touched && form.get('provincia')?.invalid" class="p-error">
+                    Provincia obbligatoria.
+                </small>
+            </div>
+
+            <div class="col  field flex flex-column">
+                <p-dropdown id="prefisso" [options]="prefissi" formControlName="prefisso" optionLabel="label"
+                    optionValue="value" class="block text-overflow-ellipsis" required
+                    placeholder="Selezionare prefisso telefonico" />
+                <small *ngIf="form.get('prefisso')?.touched && form.get('prefisso')?.invalid" class="p-error">
+                    Prefisso obbligatorio.
+                </small>
+            </div>
+
+
+        </div>
+
+        <div class="field flex flex-column">
+            <p-inputNumber placeholder="Numero di Telefono" mode="decimal" [useGrouping]="false" id="numeroDiTelefono"
+                formControlName="numeroDiTelefono" />
+            <small *ngIf="form.get('numeroDiTelefono')?.touched && form.get('numeroDiTelefono')?.invalid"
+                class="p-error">
+                Il numero di telefono è obbligatorio.
+            </small>
+        </div>
+
+        <div class="field flex flex-column">
+            <textarea placeholder="Scrivi messaggio" id="messaggio" rows="8" pInputTextarea formControlName="messaggio"></textarea>
+            <small *ngIf="form.get('messaggio')?.touched && form.get('messaggio')?.invalid" class="p-error">
+                Messaggio obbligatorio.
+            </small>
+        </div>
+
+        <p-button label="Invia" type="submit" [disabled]="!form.valid"></p-button>
+    </form>
+
+    <p-confirmDialog rejectVisible="false" acceptLabel="Ok" [style]="{'width': '450px'}">
+        <ng-template pTemplate="message" let-message>
+            <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border">
+                <i class="pi pi-exclamation-circle text-6xl text-primary-500"></i>
+                <p>Al momento il servizio di invio mail non e' disponibile. Si prega di inviare una mail cliccando il
+                    link al di sotto della mappa</p>
+            </div>
+        </ng-template>
+    </p-confirmDialog>
+</section>

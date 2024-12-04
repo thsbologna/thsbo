@@ -1,0 +1,50 @@
+<p-divider />
+<footer class="surface-section px-4 py-4 md:px-6 lg:px-8">
+  <div class="text-center mb-4">
+    <img src="/images/ths_logo.png" alt="" width="200px" />
+  </div>
+  <div class="text-700 text-center">
+    <div class="text-900 font-bold text-md mb-3">© 2024 TH&S Bologna Srl,</div>
+    <div class="text-700 text-md mb-5">
+      Blocco 4A Galliera A n.26/28 CENTERGROSS - Bologna - P.Iva: 00494741200
+      <br />
+      Tutti i marchi riportati sono marchi registrati e appartengono ai loro
+      rispettivi proprietari.
+    </div>
+  </div>
+
+  <p-divider />
+
+  <div class="w-full flex justify-content-center align-items-center gap-4">
+    @for (l of link; track $index) { @if (l['id'] == '1' || l['id'] == '2') {
+    <a [routerLink]="l.routerLink">
+      <span
+        class="p-3 inline-block surface-card"
+        style="border-radius: 10px"
+      >
+        <i *ngIf="l['id']=='1'" [classList]="l.icon + ' text-2xl text-600'"></i>
+        <i *ngIf="l['id']=='2'" [classList]="l.icon + ' text-2xl text-600'"></i>
+      </span>
+    </a>
+    } @if (l['id'] == '3') {
+    <a href="tel:051863340">
+      <span
+        class="p-3 inline-block surface-card"
+        style="border-radius: 10px"
+      >
+        <i [classList]="l.icon + ' text-2xl text-600'"></i>
+      </span>
+    </a>
+    } @if (l['id'] == '4') {
+
+    <a href="https://it.linkedin.com/company/th-s-bologna-srl" target="_blank">
+      <span
+        class="p-3 inline-block surface-card"
+        style="border-radius: 10px"
+      >
+        <i [classList]="l.icon + ' text-2xl text-600'"></i>
+      </span>
+    </a>
+    } }
+  </div>
+</footer>

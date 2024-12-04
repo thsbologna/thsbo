@@ -1,0 +1,11 @@
+:host ::ng-deep .p-dialog-footer .p-button {
+  width: 100% !important;
+}
+
+:host ::ng-deep .p-dataview-header {
+  background-color: white;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
