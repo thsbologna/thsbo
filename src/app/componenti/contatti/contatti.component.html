@@ -1,45 +1,88 @@
-<div class="grid grid-nogutter surface-section text-900 w-full\ py-8">
-  <div class="xl:w-5 w-12 h-full flex justify-content-center flex-column align-items-center z-3">
-    <h1 class="block text-6xl font-bold mb-5">Dove trovarci</h1>
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2841.4764883162634!2d11.375050975398091!3d44.58727889152054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477fcc1a19edf0d1%3A0xeb205fa09604d5b7!2sTh%20%26%20S%20Bologna%20Srl!5e0!3m2!1sit!2sit!4v1728390792464!5m2!1sit!2sit"
-      width="400" height="300" style="border: 0" allowfullscreen="" loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"></iframe>
-    <div class="flex flex-column py-3">
-      <div id="phone_number" class="contact_link">
-        <a href="tel:051863340" aria-label="Contattaci via telefono"
-          class="flex align-items-center gap-2 no-underline text-lg font-semibold" style="color: black;">
-          <i class="pi pi-phone text-2xl"></i>
-          <p>051 863340</p>
-        </a>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>TH&S Bologna - Contatti</title>
+    <base href="/contatti" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="TH&S Bologna - Soluzioni informatiche su misura per hardware, software e assistenza. Contatti"
+    />
+    <meta
+      name="keywords"
+      content="Bologna, Informatica, Hardware, Software, Assistenza, TH&S Bologna, Compuprint, Xerox, Contatti"
+    />
+    <meta name="author" content="TH&S Bologna, Andrea Battista" />
+  </head>
+  <body>
+    <div class="grid grid-nogutter surface-section text-900 w-full\ py-8">
+      <div
+        class="xl:w-5 w-12 h-full flex justify-content-center flex-column align-items-center z-3"
+      >
+        <h1 class="block text-6xl font-bold mb-5">Dove trovarci</h1>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2841.4764883162634!2d11.375050975398091!3d44.58727889152054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477fcc1a19edf0d1%3A0xeb205fa09604d5b7!2sTh%20%26%20S%20Bologna%20Srl!5e0!3m2!1sit!2sit!4v1728390792464!5m2!1sit!2sit"
+          width="400"
+          height="300"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+        <div class="flex flex-column py-3">
+          <div id="phone_number" class="contact_link">
+            <a
+              href="tel:051863340"
+              aria-label="Contattaci via telefono"
+              class="flex align-items-center gap-2 no-underline text-lg font-semibold"
+              style="color: black"
+            >
+              <i class="pi pi-phone text-2xl"></i>
+              <p>051 863340</p>
+            </a>
+          </div>
+          <div id="linkedin" class="contact_link">
+            <a
+              href="https://it.linkedin.com/company/th-s-bologna-srl"
+              target="_blank"
+              class="flex align-items-center gap-2 no-underline text-lg font-semibold"
+              aria-label="LinkedIn"
+            >
+              <i class="pi pi-linkedin text-2xl"></i>
+              <p>TH&S Bologna SRL</p>
+            </a>
+          </div>
+          <div id="email" class="contact_link">
+            <a
+              href="mailto:serviceweb@thsbo.it"
+              aria-label="Gmail"
+              class="flex align-items-center gap-2 no-underline text-orange-700 text-lg font-semibold"
+            >
+              <i class="pi pi-envelope text-2xl"></i>
+              <p>serviceweb&#64;thsbo.it</p>
+            </a>
+          </div>
+        </div>
       </div>
-      <div id="linkedin" class="contact_link">
-        <a href="https://it.linkedin.com/company/th-s-bologna-srl" target="_blank"
-          class="flex align-items-center gap-2 no-underline text-lg font-semibold" aria-label="LinkedIn">
-          <i class="pi pi-linkedin text-2xl"></i>
-          <p>TH&S Bologna SRL</p>
-        </a>
-      </div>
-      <div id="email" class="contact_link">
-        <a href="mailto:serviceweb@thsbo.it" aria-label="Gmail"
-          class="flex align-items-center gap-2 no-underline text-orange-700 text-lg font-semibold">
-          <i class="pi pi-envelope text-2xl"></i>
-          <p>serviceweb&#64;thsbo.it</p>
-        </a>
+
+      <div
+        class="xl:w-7 w-12 flex flex-column justify-content-center align-items-center"
+      >
+        <h1 class="block text-6xl font-bold mb-0 z-2">Contattaci</h1>
+
+        <p-tabView class="w-full px-4 md:px-8 xl:pl-0">
+          <p-tabPanel header="Azienda/Libero professionista">
+            <app-contatti-form-azienda-libero-professionista />
+          </p-tabPanel>
+          <p-tabPanel header="Privato">
+            <app-contatti-form-privato />
+          </p-tabPanel>
+        </p-tabView>
       </div>
     </div>
-  </div>
-
-  <div class="xl:w-7 w-12 flex flex-column justify-content-center align-items-center">
-    <h1 class="block text-6xl font-bold mb-0 z-2">Contattaci</h1>
-
-    <p-tabView class="w-full px-4 md:px-8 xl:pl-0">
-      <p-tabPanel header="Azienda/Libero professionista">
-        <app-contatti-form-azienda-libero-professionista />
-      </p-tabPanel>
-      <p-tabPanel header="Privato">
-        <app-contatti-form-privato />
-      </p-tabPanel>
-    </p-tabView>
-  </div>
-</div>
+  </body>
+</html>
