@@ -1,0 +1,90 @@
+<section class="flex justify-content-center align-items-center">
+    <div class="surface-card p-4 mx-4 shadow-2 border-round w-full md:w-7 lg:w-6">
+        <div class="text-center mb-3">
+            <div class="text-900 text-3xl font-medium mb-1">Benvenuto! Registrati</div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" id="form" class="w-full flex flex-column ">
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col field flex flex-column">
+                    <label for="nome">Nome</label>
+                    <input type="text" pInputText formControlName="nome" id="nome" required autofocus />
+                    <small *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="p-error">
+                        Nome obbligatorio.
+                    </small>
+                </div>
+
+                <div class="col field flex flex-column">
+                    <label for="cognome">Cognome</label>
+                    <input type="text" pInputText formControlName="cognome" id="cognome" required autofocus />
+                    <small *ngIf="form.get('cognome')?.touched && form.get('cognome')?.invalid" class="p-error">
+                        Cogome obbligatorio.
+                    </small>
+                </div>
+            </div>
+
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col field flex flex-column">
+                    <label for="codiceFiscale">Codice Fiscale</label>
+                    <input type="text" pInputText id="codiceFiscale" formControlName="codiceFiscale" required autofocus />
+                    <small *ngIf="form.get('codiceFiscale')?.touched && form.get('codiceFiscale')?.invalid"
+                        class="p-error">
+                        Il codice fiscale è obbligatorio.
+                    </small>
+                </div>
+
+                <div class="col field flex flex-column">
+                    <label for="email">Email</label>
+                    <input type="text" pInputText id="email" formControlName="indirizzoEmail" required autofocus />
+                    <small *ngIf="form.get('indirizzoEmail')?.touched && form.get('indirizzoEmail')?.invalid" class="p-error">
+                        Indirizzo email obbligatorio
+                    </small>
+                </div>
+            </div>
+
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col sm:col-4 field flex flex-column">
+                    <label for="prefisso">Prefisso</label>
+                    <p-dropdown id="prefisso" [options]="prefissi" optionLabel="label" formControlName="prefisso" optionValue="value"
+                        class="block text-overflow-ellipsis" required placeholder="Selezionare prefisso telefonico" />
+                    <small *ngIf="form.get('prefisso')?.touched && form.get('prefisso')?.invalid" class="p-error">
+                        Prefisso obbligatorio.
+                    </small>
+                </div>
+
+                <div class="col field flex flex-column">
+                    <label for="numeroDiTelefono">Numero di telefono</label>
+                    <p-inputNumber mode="decimal" formControlName="numeroDiTelefono" [useGrouping]="false" id="numeroDiTelefono" />
+                    <small *ngIf="form.get('numeroDiTelefono')?.touched && form.get('numeroDiTelefono')?.invalid"
+                        class="p-error">
+                        Il numero di telefono è obbligatorio.
+                    </small>
+                </div>
+            </div>
+
+            
+
+            <div class="field flex flex-column">
+                <label for="nuova-password">Password</label>
+                <p-password formControlName="password" id="nuova-password" required autocomplete="true" [toggleMask]="true" />
+                <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid" class="p-error">
+                    Password obbligatoria.
+                </small>
+            </div>
+
+            <div class="field flex flex-column">
+                <label for="ripetiPassword">Ripeti Password</label>
+                <p-password formControlName="ripetiPassword" id="ripetiPassword" autocomplete="true" required toggleMask="true"[toggleMask]="" />
+                <small *ngIf="form.get('ripetiPassword')?.touched && form.get('ripetiPassword')?.invalid" class="p-error">
+                    Password obbligatoria.
+                </small>
+            </div>
+
+            <small *ngIf="form.hasError('passwordsDoNotMatch') && (form.get('ripetiPassword')?.touched || form.get('password')?.touched)" class="p-error">
+                Le password non coincidono.
+              </small>
+
+            <p-button label="Registrati" type="submit" [disabled]="!form.valid"></p-button>
+        </form>
+    </div>
+</section>

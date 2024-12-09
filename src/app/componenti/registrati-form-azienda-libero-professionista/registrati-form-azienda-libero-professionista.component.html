@@ -1,0 +1,110 @@
+<section class="flex justify-content-center align-items-center">
+    <div class="surface-card p-4 mx-4 shadow-2 border-round w-full md:w-7 lg:w-6">
+        <div class="text-center mb-3">
+            <div class="text-900 text-3xl font-medium mb-1">Benvenuto! Registrati</div>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" id="form" class="w-full flex flex-column ">
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col field flex flex-column">
+                    <label for="ragioneSociale">Ragione Sociale</label>
+                    <input type="text" pInputText id="ragioneSociale" formControlName="ragioneSociale" required autofocus />
+                    <small *ngIf="form.get('ragioneSociale')?.touched && form.get('ragioneSociale')?.invalid"
+                        class="p-error">
+                        La ragione sociale è obbligatoria.
+                    </small>
+                </div>
+
+                <div class="col field flex flex-column">
+                    <label for="codiceFiscale">Codice Fiscale</label>
+                    <input type="text" pInputText id="codiceFiscale" formControlName="codiceFiscale" required autofocus />
+                    <small *ngIf="form.get('codiceFiscale')?.touched && form.get('codiceFiscale')?.invalid" class="p-error">
+                        Il codice fiscale è obbligatorio.
+                    </small>
+                </div>
+            </div>
+
+            <div class="field flex flex-column">
+                <label for="email">Email</label>
+                <input type="text" pInputText id="email" formControlName="indirizzoEmail" required autofocus />
+                <small *ngIf="form.get('email')?.touched && form.get('email')?.invalid" class="p-error">
+                    L'indirizzo email è obbligatorio e deve essere valido.
+                </small>
+            </div>
+
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col field flex flex-column">
+                    <label for="tipoAttivita">Tipo Attività</label>
+                    <p-dropdown id="attivita" [disabled]="true" formControlName="tipoAttivita"
+                        class="text-overflow-ellipsis" required [placeholder]="attivita" />
+                    <small *ngIf="form.get('tipoAttivita')?.touched && form.get('tipoAttivita')?.invalid" class="p-error">
+                        Il tipo di attività è obbligatorio.
+                    </small>
+                </div>
+
+                <div class="col field flex flex-column">
+                    <label for="partitaIVA">Partita IVA</label>
+                    <p-inputNumber mode="decimal" [useGrouping]="false" id="partitaIVA" formControlName="partitaIVA" />
+                    <small *ngIf="form.get('partitaIVA')?.touched && form.get('partitaIVA')?.invalid" class="p-error">
+                        La partita IVA è obbligatoria.
+                    </small>
+                </div>
+            </div>
+
+            <div class="grid grid-nogutter w-full gap-3">
+                <div class="col field flex flex-column">
+                    <label for="provincia">Provincia</label>
+                    <p-dropdown id="provincia" [options]="province" formControlName="provincia"
+                        class="block text-overflow-ellipsis" required placeholder="Selezionare provincia di residenza" />
+                    <small *ngIf="form.get('provincia')?.touched && form.get('provincia')?.invalid" class="p-error">
+                        Provincia obbligatoria.
+                    </small>
+                </div>
+
+                <div class="col  field flex flex-column">
+                    <label for="prefisso">Prefisso</label>
+                    <p-dropdown id="prefisso" [options]="prefissi" formControlName="prefisso" optionLabel="label"
+                        optionValue="value" class="text-overflow-ellipsis" required
+                        placeholder="Selezionare prefisso telefonico" />
+                    <small *ngIf="form.get('prefisso')?.touched && form.get('prefisso')?.invalid" class="p-error">
+                        Prefisso obbligatorio.
+                    </small>
+                </div>
+            </div>
+
+            <div class="field flex flex-column">
+                <label for="numeroDiTelefono">Numero di telefono</label>
+                <p-inputNumber mode="decimal" [useGrouping]="false" id="numeroDiTelefono"
+                    formControlName="numeroDiTelefono" />
+                <small *ngIf="form.get('numeroDiTelefono')?.touched && form.get('numeroDiTelefono')?.invalid"
+                    class="p-error">
+                    Il numero di telefono è obbligatorio.
+                </small>
+            </div>
+
+
+
+            <div class="field flex flex-column">
+                <label for="nuova-password">Password</label>
+                <p-password formControlName="password" id="nuova-password" required autocomplete="true" [toggleMask]="true" />
+                <small *ngIf="form.get('password')?.touched && form.get('password')?.invalid" class="p-error">
+                    Password obbligatoria.
+                </small>
+            </div>
+
+            <div class="field flex flex-column">
+                <label for="ripetiPassword">Ripeti Password</label>
+                <p-password formControlName="ripetiPassword" id="ripetiPassword" autocomplete="true" required toggleMask="true"[toggleMask]="" />
+                <small *ngIf="form.get('ripetiPassword')?.touched && form.get('ripetiPassword')?.invalid" class="p-error">
+                    Password obbligatoria.
+                </small>
+            </div>
+
+            <small *ngIf="form.hasError('passwordsDoNotMatch') && (form.get('ripetiPassword')?.touched || form.get('password')?.touched)" class="p-error">
+                Le password non coincidono.
+              </small>
+
+            <p-button label="Registrati" type="submit" [disabled]="!form.valid"></p-button>
+        </form>
+    </div>
+</section>

@@ -7,6 +7,8 @@ import { ShopCategoriaProdottiComponent } from './componenti/shop-categoria-prod
 import { ShopProdottiComponent } from './componenti/shop-prodotti/shop-prodotti.component';
 import { ShopProdottoDettagliComponent } from './componenti/shop-prodotto-dettagli/shop-prodotto-dettagli.component';
 import { ShopComponent } from './componenti/shop/shop.component';
+import { LoginComponent } from './componenti/login/login.component';
+import { RegistratiComponent } from './componenti/registrati/registrati.component';
 
 export const routes: Routes = [
   {
@@ -42,7 +44,7 @@ export const routes: Routes = [
         path: 'prodotti/categoria/:nome/prodotti',
         component: ShopCategoriaProdottiComponent,
       },
-      /* {
+      {
                 path: 'accedi',
                 component: LoginComponent,
                 title: 'TH&S Bologna SRL - Accedi',
@@ -51,7 +53,7 @@ export const routes: Routes = [
                 path: 'registrazione',
                 component: RegistratiComponent,
                 title: 'TH&S Bologna SRL - Registrati',
-            } */
+            }
     ],
   },
   {

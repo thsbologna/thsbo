@@ -1,0 +1,11 @@
+:host ::ng-deep p-inputnumber,
+::ng-deep .p-inputnumber,
+::ng-deep .p-input-number-input,
+::ng-deep .p-dropdown,
+::ng-deep .p-button,
+::ng-deep .p-password,
+::ng-deep .p-password-input,
+::ng-deep .p-password-panel
+ {
+  width: 100% !important;
+}

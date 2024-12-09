@@ -35,7 +35,7 @@ export class ShopComponent {
         this.categorie = res.data;
 
         this.items = [
-          /* {
+          {
             label: 'Account',
             icon: 'pi pi-user',
             items: [
@@ -72,7 +72,7 @@ export class ShopComponent {
                 }
               ],
             ]
-          }, */
+          },
           {
             label: 'Prodotti',
             icon: 'pi pi-box',
@@ -95,5 +95,9 @@ export class ShopComponent {
         console.error('Errore nel recuperare le categorie:', err);
       }
     });
+  }
+
+  onUtenteRegistrato() {
+    this.isUtenteCollegato = true;
   }
 }
