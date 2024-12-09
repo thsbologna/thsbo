@@ -13,7 +13,8 @@ import { RegistratiComponent } from './componenti/registrati/registrati.componen
 export const routes: Routes = [
   {
     path: 'home',
-    title: 'TH&S Bologna SRL - Soluzioni Informatiche',
+    title:
+      'Soluzioni Informatiche a Bologna | TH&S Bologna - Hardware, Software e Assistenza',
     component: HomeComponent,
   },
   {
@@ -37,23 +38,23 @@ export const routes: Routes = [
         title: 'TH&S Bologna SRL - Prodotti',
       },
       {
-        path: 'prodotti/prodotto/:codice/prodotto',
+        path: 'prodotti/prodotto/:nome/prodotto',
         component: ShopProdottoDettagliComponent,
       },
       {
         path: 'prodotti/categoria/:nome/prodotti',
         component: ShopCategoriaProdottiComponent,
       },
+      /* {
+        path: 'accedi',
+        component: LoginComponent,
+        title: 'TH&S Bologna SRL - Accedi',
+      },
       {
-                path: 'accedi',
-                component: LoginComponent,
-                title: 'TH&S Bologna SRL - Accedi',
-            },
-            {
-                path: 'registrazione',
-                component: RegistratiComponent,
-                title: 'TH&S Bologna SRL - Registrati',
-            }
+        path: 'registrazione',
+        component: RegistratiComponent,
+        title: 'TH&S Bologna SRL - Registrati',
+      }, */
     ],
   },
   {

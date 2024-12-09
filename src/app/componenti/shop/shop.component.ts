@@ -35,7 +35,7 @@ export class ShopComponent {
         this.categorie = res.data;
 
         this.items = [
-          {
+          /* {
             label: 'Account',
             icon: 'pi pi-user',
             items: [
@@ -72,7 +72,7 @@ export class ShopComponent {
                 }
               ],
             ]
-          },
+          }, */
           {
             label: 'Prodotti',
             icon: 'pi pi-box',

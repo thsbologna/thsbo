@@ -21,7 +21,7 @@ export class ProdottoService extends BaseService {
     return this.http.get<ResponseCustom>(this.url + '/categoria/' + nome + '/attivi');
   }
 
-  getByCodice(codice: string) {
-    return this.http.get<ResponseCustom>(this.url + '/prodotto/' + codice);
+  getByCodice(nome: string) {
+    return this.http.get<ResponseCustom>(this.url + '/prodotto/' + nome);
   }
 }
