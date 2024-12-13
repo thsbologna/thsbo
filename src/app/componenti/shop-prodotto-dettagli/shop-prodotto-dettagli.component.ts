@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,12 @@ import { ResponseCustom } from '../../interfacce/response-custom';
 import { BaseService } from '../../servizi/base.service';
 import { ProdottoService } from '../../servizi/prodotto.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { UtenteService } from '../../servizi/utente.service';
+import { Utente } from '../../utente';
+import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-shop-prodotto-dettagli',
@@ -24,16 +30,21 @@ import { Meta, Title } from '@angular/platform-browser';
     ConfirmDialogModule,
     TagModule,
     ProgressSpinnerModule,
+    InputNumberModule,
+    FormsModule,
+    ToastModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './shop-prodotto-dettagli.component.html',
   styleUrl: './shop-prodotto-dettagli.component.css',
 })
 export class ShopProdottoDettagliComponent {
+  @Output() carrelloAggiornato = new EventEmitter<any>();
   codice: string = '';
   prodotto!: Prodotto;
   baseUrl!: string;
   footer: string = 'Dettagli prodotto';
+  quantita: number = 1;
 
   constructor(
     private route: ActivatedRoute, // Per ottenere il parametro 'nome' dalla rotta
@@ -43,19 +54,20 @@ export class ShopProdottoDettagliComponent {
     private confirmationService: ConfirmationService,
     private router: Router,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    private elementiCarrelloService: ElementiCarrelloService
   ) {}
 
   ngOnInit() {
     this.baseUrl = this.baseService.baseUrl + '/immagini';
 
     this.route.params.subscribe((params) => {
-      this.codice = params['nome'];
-      this.getAll(this.codice);
+      this.codice = params['codice'];
+      this.getProdotto(this.codice);
     });
   }
 
-  getAll(codice: string): void {
+  getProdotto(codice: string): void {
     this.prodottoService.getByCodice(codice).subscribe({
       next: (res: ResponseCustom) => {
         this.prodotto = { ...res.data };
@@ -75,11 +87,19 @@ export class ShopProdottoDettagliComponent {
         this.messageService.add({
           severity: 'error',
           summary: 'Errore',
-          detail: err.error.message,
+          detail: err.error.messaggio,
           life: 3000,
         });
       },
     });
+  }
+
+  checkStorage() {
+    return (
+      typeof window !== 'undefined' &&
+      (sessionStorage!.getItem('utente') != null ||
+        localStorage!.getItem('utente') != null)
+    );
   }
 
   faiInviareMail(event: Event) {
@@ -90,5 +110,29 @@ export class ShopProdottoDettagliComponent {
         this.router.navigateByUrl('/contatti');
       },
     });
+  }
+
+  aggiungiAlCarrello(event: Event) {
+    event.stopImmediatePropagation();
+
+    if (this.checkStorage()) {
+      this.elementiCarrelloService
+        .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), this.prodotto.codice, this.quantita)
+        .subscribe({
+          next: (res: ResponseCustom) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successo',
+              detail: res.messaggio,
+              life: 2000,
+            });
+
+            this.carrelloAggiornato.emit();
+            this.quantita = 1;
+          },
+        });
+    } else {
+      this.router.navigateByUrl('/shop/accedi');
+    }
   }
 }

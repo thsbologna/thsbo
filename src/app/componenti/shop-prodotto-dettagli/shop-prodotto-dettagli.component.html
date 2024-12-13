@@ -1,5 +1,5 @@
 <section class="px-4">
-  <div class=" p-0 cursor-pointer w-max">
+  <div class="p-0 cursor-pointer w-max">
     <p routerLink="/shop/prodotti" class="text-primary w-max">
       <i class="pi pi-arrow-left"></i>
       Torna ai prodotti
@@ -7,6 +7,8 @@
   </div>
 
   @if (prodotto) {
+
+  <p-toast />
   <div
     class="prodotto-container mt-6 w-full flex md:flex-row flex-column justify-content-center md:align-items-start align-items-center gap-6"
   >
@@ -27,17 +29,19 @@
 
     <div class="md:w-6">
       <div class="flex justify-content-center md:justify-content-start">
-      <p-tag
-        [value]="prodotto.categoria?.nome"
-        severity="success"
-        [routerLink]="
-          '/shop/prodotti/categoria/' + prodotto.categoria!.nome + '/prodotti'
-        "
-        class="cursor-pointer capitalize"
-      />
+        <p-tag
+          [value]="prodotto.categoria?.nome"
+          severity="success"
+          [routerLink]="
+            '/shop/prodotti/categoria/' + prodotto.categoria!.nome + '/prodotti'
+          "
+          class="cursor-pointer capitalize"
+        />
       </div>
 
-      <h1 class="text-center md:text-left block text-6xl font-bold mx-0 mt-2 mb-3">
+      <h1
+        class="text-center md:text-left block text-6xl font-bold mx-0 mt-2 mb-3"
+      >
         {{ prodotto.nome }}
       </h1>
       <p class="line-height-3 mb-3 text-justify">{{ prodotto.descrizione }}</p>
@@ -51,26 +55,50 @@
         <span class="font-semibold">{{ prodotto.giorniConsegnaMax }}</span>
         giorni lavorativi
       </p>
-      <p class="block mx-0 mt-2">
+      <p class="block mx-0 mt-2" *ngIf="prodotto.disponibilita! > 0">
         Disponibilita':
         <span class="font-semibold">{{ prodotto.disponibilita }}</span>
       </p>
-      <button
-        pButton
-        type="button"
-        label="Aggiungi al carrello"
-        (click)="faiInviareMail($event)"
-        icon="pi pi-shopping-cart"
-        size="small"
-        class="md:w-auto w-full mt-2"
-      ></button>
+
+      <p class="block mx-0 mt-2" *ngIf="prodotto.disponibilita! <= 0">
+        Disponibilita': 0
+      </p>
+      <div class="flex align-items-center justify-content-start gap-3 mt-4">
+        <p-inputNumber
+          [(ngModel)]="quantita"
+          min="1"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          spinnerMode="vertical"
+          inputId="vertical"
+          [inputStyle]="{ width: '3rem' }"
+        >
+          <ng-template pTemplate="incrementbuttonicon">
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template pTemplate="decrementbuttonicon">
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputNumber>
+
+        <button
+          pButton
+          type="button"
+          label="Aggiungi al carrello"
+          (click)="aggiungiAlCarrello($event)"
+          icon="pi pi-shopping-cart"
+          class="md:w-auto w-"
+        ></button>
+      </div>
     </div>
   </div>
-} @else {
-  <div class="surface-300 w-full h-full flex justify-content-center align-items-center" >
+  } @else {
+  <div
+    class="surface-300 w-full h-full flex justify-content-center align-items-center"
+  >
     <p-progressSpinner />
   </div>
-}
+  }
 
   <p-confirmDialog
     rejectVisible="false"

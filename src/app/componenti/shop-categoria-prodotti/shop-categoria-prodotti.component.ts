@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataViewModule } from 'primeng/dataview';
 import { ButtonModule } from 'primeng/button';
@@ -10,17 +10,30 @@ import { Prodotto } from '../../interfacce/prodotto';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { BaseService } from '../../servizi/base.service';
 import { ProdottoService } from '../../servizi/prodotto.service';
+import { UtenteService } from '../../servizi/utente.service';
+import { Utente } from '../../utente';
+import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-shop-categoria-prodotti',
   standalone: true,
-  imports: [CommonModule, DataViewModule, ButtonModule, RouterModule, ConfirmDialogModule, ProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    DataViewModule,
+    ButtonModule,
+    RouterModule,
+    ConfirmDialogModule,
+    ProgressSpinnerModule,
+    ToastModule
+  ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './shop-categoria-prodotti.component.html',
   styleUrl: './shop-categoria-prodotti.component.css',
 })
 export class ShopCategoriaProdottiComponent {
   @Input() isUtenteCollegato!: boolean;
+  @Output() carrelloAggiornato = new EventEmitter<any>();
   layout: 'list' | 'grid' = 'list';
   categoriaNome: string = '';
   prodotti!: Prodotto[];
@@ -32,11 +45,12 @@ export class ShopCategoriaProdottiComponent {
     private baseService: BaseService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private elementiCarrelloService: ElementiCarrelloService
   ) {}
 
   ngOnInit() {
-    this.baseUrl = this.baseService.baseUrl + '/immagini'
+    this.baseUrl = this.baseService.baseUrl + '/immagini';
 
     this.route.params.subscribe((params) => {
       this.categoriaNome = params['nome'];
@@ -60,10 +74,32 @@ export class ShopCategoriaProdottiComponent {
     });
   }
 
-  aggiungiAlCarrello(event: Event) {
-    event.stopPropagation();
+  checkStorage() {
+    return (
+      typeof window !== 'undefined' &&
+      (sessionStorage!.getItem('utente') != null ||
+        localStorage!.getItem('utente') != null)
+    );
+  }
 
-    if (this.isUtenteCollegato) {
+  aggiungiAlCarrello(event: Event, prodotto: Prodotto) {
+    event.stopImmediatePropagation();
+
+    if (this.checkStorage()) {
+      this.elementiCarrelloService
+        .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), prodotto.codice, 1)
+        .subscribe({
+          next: (res: ResponseCustom) => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Successo',
+              detail: res.messaggio,
+              life: 2000,
+            });
+
+            this.carrelloAggiornato.emit();
+          },
+        });
     } else {
       this.router.navigateByUrl('/shop/accedi');
     }

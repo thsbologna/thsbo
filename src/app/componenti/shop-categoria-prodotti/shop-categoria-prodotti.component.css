@@ -1,3 +1,7 @@
+section {
+  min-height: calc(100dvh - 170px);
+}
+
 :host ::ng-deep .p-dialog-footer .p-button {
   width: 100% !important;
 }
@@ -9,3 +13,17 @@
   border-right: none;
   border-bottom: none;
 }
+
+@media screen and (max-width:768px) {
+  img {
+    max-width: 250px;
+    height: 250px;
+  }
+}
+
+@media screen and (max-width:575px) {
+  :host ::ng-deep .p-button {
+    width: 100%;
+  }
+}
+

@@ -41,14 +41,14 @@
   [value]="elementiCarosello"
   [numVisible]="1"
   [numScroll]="1"
-  autoplayInterval="0"
+  autoplayInterval="10000"
   [circular]="true"
 >
   <ng-template let-slide pTemplate="item">
     <div
       class="carousel_item w-full flex flex-column justify-content-evenly align-items-center pt-8"
     >
-      <h1 class="slide_title text-3xl md:text-4xl lg:text-5xl text-center">
+      <h1 class="slide_title text-3xl md:text-4xl lg:text-5xl text-center font-medium">
         {{ slide.titolo }}
       </h1>
       <img
@@ -57,7 +57,7 @@
         [alt]="slide.titolo + ' image'"
       />
       <p
-        class="text-center md:text-base lg:text-lg text-sm font-semibold lg:w-6 md:w-8 w-12"
+        class="text-center md:text-base lg:text-lg text-sm lg:w-6 md:w-8 w-12"
       >
         {{ slide.descrizione }}
       </p>

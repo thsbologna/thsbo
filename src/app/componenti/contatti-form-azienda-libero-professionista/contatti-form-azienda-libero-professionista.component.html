@@ -43,7 +43,7 @@
             </div>
 
             <div class="col field flex flex-column">
-                <p-inputNumber placeholder="Partita IVA" mode="decimal" [useGrouping]="false" id="partitaIVA" formControlName="partitaIVA" />
+                <input pInputText placeholder="Partita IVA" mode="decimal" id="partitaIVA" formControlName="partitaIVA" />
                 <small *ngIf="form.get('partitaIVA')?.touched && form.get('partitaIVA')?.invalid" class="p-error">
                     La partita IVA è obbligatoria.
                 </small>

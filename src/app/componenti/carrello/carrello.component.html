@@ -1,0 +1,121 @@
+<section>
+  @if (elementiCarrello) {
+  <p-toast />
+  <p-dataView
+    #dv
+    [value]="elementiCarrello"
+    [emptyMessage]="'Nessun articolo presente nel carrello'"
+    row
+  >
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between">
+        <h1>Il tuo carrello</h1>
+        <div>
+        <h1>Totale {{ carrello.totale | currency: "EUR" }}</h1>
+        <p-button [disabled]="elementiCarrello.length === 0" label="Ordina ora" (onClick)="creaOrdine()"></p-button>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="list" let-elementiCarrello>
+      <div class="grid grid-nogutter">
+        <div
+          class="col-12"
+          *ngFor="let item of elementiCarrello; let first = first"
+          class="col-12"
+        >
+          <div
+            class="flex flex-column hover:surface-50 sm:flex-row sm:align-items-center p-3 gap-3 z-2"
+            [ngClass]="{ 'border-top-1 surface-border': !first }"
+          >
+            <div class="sm:w-10rem relative">
+              <img
+                title="immagine prodotto"
+                *ngIf="item.prodotto.immagine"
+                class="block xl:block mx-auto border-round w-full"
+                [src]="baseUrl + item.prodotto.immagine.url"
+                [alt]="item.prodotto.nome"
+              />
+              <img
+                title="immagine prodotto"
+                *ngIf="item.prodotto.immagine == null"
+                class="block xl:block mx-auto border-round w-full"
+                src="/images/Image-not-found.png"
+                [alt]="item.prodotto.nome"
+              />
+            </div>
+            <div
+              class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4"
+            >
+              <div
+                class="flex flex-row md:flex-column justify-content-between align-items-start gap-2"
+              >
+                <div>
+                  <span class="font-medium text-secondary text-sm capitalize">{{
+                    item.prodotto.categoria.nome
+                  }}</span>
+                  <div class="text-lg font-medium text-900 my-2 lowercase nome">
+                    {{ item.prodotto.nome }}
+                  </div>
+                  <span
+                    class="font-medium text-primary text-sm cursor-pointer"
+                    [routerLink]="
+                      '/shop/prodotti/prodotto/' +
+                      item.prodotto.codice +
+                      '/prodotto'
+                    "
+                  >
+                    Vedi dettagli <i class="pi pi-arrow-right"></i
+                  ></span>
+                </div>
+              </div>
+              <div class="flex md:flex-column md:align-items-end align-items-start">
+                <span class="text-xl font-semibold">{{
+                  item.prezzo | number : "1.2-2" | currency : "EUR"
+                }}</span>
+                <div class="flex md:flex-row gap-3 align-items-center">
+                  <div class="flex align-items-center">
+                    <p-button class="qbutton" icon="pi pi-minus" size="small" (onClick)="decrementaQuantita(item)" />
+                    <p class="quantity border-1 border-round surface-border">{{ item.quantita }}</p>
+                    <p-button class="qbutton" icon="pi pi-plus" size="small" (onClick)="incrementaQuantita(item)" />
+                  </div>
+                  <p-button
+                    icon="pi pi-trash"
+                    size="small"
+                    severity="danger"
+                    class="md:flex-initial white-space-nowrap z-1 cart"
+                    (onClick)="rimuoviElementoDalCarrello(item)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+
+  <p-confirmDialog #cd rejectButtonStyleClass="se" >
+      <ng-template pTemplate="footer">
+        <button type="button" pButton
+
+        size="small"
+            icon="pi pi-times" label="Annulla"
+            (click)="cd.reject()">
+        </button>
+
+        <button type="button" pButton
+        severity="danger"
+            icon="pi pi-check" label="Rimuovi"
+            size="small"
+            (click)="cd.accept()">
+        </button>
+    </ng-template>
+    </p-confirmDialog>
+  } @else {
+  <div
+    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  }
+</section>

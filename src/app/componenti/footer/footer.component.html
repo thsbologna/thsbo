@@ -5,7 +5,7 @@
   </div>
   <div class="text-700 text-center">
     <div class="text-900 font-bold text-md mb-3">© 2024 TH&S Bologna Srl,</div>
-    <div class="text-700 text-md mb-5">
+    <div class="text-900 text-md mb-5">
       Blocco 4A Galliera A n.26/28 CENTERGROSS - Bologna - P.Iva: 00494741200
       <br />
       Tutti i marchi riportati sono marchi registrati e appartengono ai loro
@@ -22,8 +22,8 @@
         class="p-3 inline-block surface-card"
         style="border-radius: 10px"
       >
-        <i *ngIf="l['id']=='1'" [classList]="l.icon + ' text-2xl text-600'"></i>
-        <i *ngIf="l['id']=='2'" [classList]="l.icon + ' text-2xl text-600'"></i>
+        <i *ngIf="l['id']=='1'" [classList]="l.icon + ' text-2xl text-900'"></i>
+        <i *ngIf="l['id']=='2'" [classList]="l.icon + ' text-2xl text-red-700'"></i>
       </span>
     </a>
     } @if (l['id'] == '3') {
@@ -32,7 +32,7 @@
         class="p-3 inline-block surface-card"
         style="border-radius: 10px"
       >
-        <i [classList]="l.icon + ' text-2xl text-600'"></i>
+        <i [classList]="l.icon + ' text-2xl text-900'"></i>
       </span>
     </a>
     } @if (l['id'] == '4') {
@@ -42,7 +42,7 @@
         class="p-3 inline-block surface-card"
         style="border-radius: 10px"
       >
-        <i [classList]="l.icon + ' text-2xl text-600'"></i>
+        <i [classList]="l.icon + ' text-2xl text-blue-600'"></i>
       </span>
     </a>
     } }

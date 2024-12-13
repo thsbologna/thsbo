@@ -1,5 +1,7 @@
-<section class="min-h-full">
+<section>
+
   @if (prodotti) {
+    <p-toast />
   <p-dataView
     #dv
     [value]="prodotti"
@@ -8,7 +10,7 @@
     row
   >
     <ng-template pTemplate="header">
-      <div class="flex justify-content-end">
+      <div class="flex justify-content-start">
         <p-dataViewLayoutOptions />
       </div>
     </ng-template>
@@ -20,10 +22,10 @@
           class="col-12"
         >
           <div
-            class="flex flex-column hover:surface-50 sm:flex-row sm:align-items-center p-4 gap-3 cursor-pointer z-2"
+            class="flex flex-column hover:surface-50 sm:flex-row sm:align-items-center p-3 gap-3 cursor-pointer z-2"
             [ngClass]="{ 'border-top-1 surface-border': !first }"
             [routerLink]="
-              '/shop/prodotti/prodotto/' + item.nome + '/prodotto'
+              '/shop/prodotti/prodotto/' + item.codice + '/prodotto'
             "
           >
             <div class="md:w-10rem relative">
@@ -52,7 +54,7 @@
                   <span class="font-medium text-secondary text-sm capitalize">{{
                     item.categoria.nome
                   }}</span>
-                  <div class="text-lg font-medium text-900 my-2">
+                  <div class="text-lg font-medium text-900 my-2 lowercase nome">
                     {{ item.nome }}
                   </div>
                   <span
@@ -66,15 +68,15 @@
               </div>
               <div class="flex flex-column md:align-items-end gap-5">
                 <span class="text-xl font-semibold">{{
-                  "€" + item.prezzo
+                  item.prezzo | number: '1.2-2' | currency: 'EUR'
                 }}</span>
                 <div class="flex flex-row-reverse md:flex-row gap-2">
                   <p-button
                     icon="pi pi-shopping-cart"
-                    class="flex-auto md:flex-initial white-space-nowrap z-1"
+                    class="flex-auto md:flex-initial white-space-nowrap z-1 cart"
                     size="small"
                     label="Aggiungi al carrello"
-                    (onClick)="faiInviareMail($event)"
+                    (onClick)="aggiungiAlCarrello($event, item)"
                   />
                 </div>
               </div>
@@ -86,7 +88,7 @@
     <ng-template let-prodotto pTemplate="grid" let-prodotti>
       <div class="grid grid-nogutter">
         <div
-          class="col-12 sm:col-6 md:col-4 xl:col-3 p-2"
+          class="col-12 sm:col-6 xl:col-4 p-2"
           *ngFor="let prodotto of prodotti"
         >
           <div
@@ -105,7 +107,7 @@
                   class="border-round w-full"
                   [src]="baseUrl + prodotto.immagine.url"
                   [alt]="prodotto.nome"
-                  style="max-width: 300px"
+                  style="width: 250px; height: 250px;"
                 />
                 <img
                   title="immagine prodotto"
@@ -113,7 +115,7 @@
                   class="border-round w-full"
                   src="/images/Image-not-found.png"
                   [alt]="prodotto.nome"
-                  style="max-width: 300px"
+                  style="width: 250px; height: 250px;"
                 />
               </div>
             </div>
@@ -137,14 +139,14 @@
               </div>
               <div class="flex flex-column gap-4 mt-4">
                 <span class="text-2xl font-semibold">{{
-                  "€" + prodotto.prezzo
+                  prodotto.prezzo | number: '1.2-2' | currency: 'EUR'
                 }}</span>
                 <div class="flex gap-2">
                   <p-button
                     icon="pi pi-shopping-cart"
                     class="flex-auto md:flex-initial white-space-nowrap"
                     label="Aggiungi al carrello"
-                    (onClick)="faiInviareMail($event)"
+                    (onClick)="aggiungiAlCarrello($event, prodotto)"
                   />
                 </div>
               </div>

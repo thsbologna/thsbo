@@ -8,7 +8,7 @@
             <div class="grid grid-nogutter w-full gap-3">
                 <div class="col field flex flex-column">
                     <label for="nome">Nome</label>
-                    <input type="text" pInputText formControlName="nome" id="nome" required autofocus />
+                    <input autocomplete="name" type="text" pInputText formControlName="nome" id="nome" required autofocus />
                     <small *ngIf="form.get('nome')?.touched && form.get('nome')?.invalid" class="p-error">
                         Nome obbligatorio.
                     </small>
@@ -16,7 +16,7 @@
 
                 <div class="col field flex flex-column">
                     <label for="cognome">Cognome</label>
-                    <input type="text" pInputText formControlName="cognome" id="cognome" required autofocus />
+                    <input autocomplete="name" type="text" pInputText formControlName="cognome" id="cognome" required autofocus />
                     <small *ngIf="form.get('cognome')?.touched && form.get('cognome')?.invalid" class="p-error">
                         Cogome obbligatorio.
                     </small>
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            
+
 
             <div class="field flex flex-column">
                 <label for="nuova-password">Password</label>

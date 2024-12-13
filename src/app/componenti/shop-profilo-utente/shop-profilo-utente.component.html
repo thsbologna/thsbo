@@ -1,0 +1,170 @@
+@if (utente) {
+<section class="top-0 h-screen">
+  <div
+    class="w-full sm:px-8 px-4 py-3 surface-600 flex justify-content-between align-items-center"
+  >
+    <h3 class="font-medium text-100">Il mio account</h3>
+    <p-button
+      (onClick)="logout()"
+      label="logout"
+      icon="pi pi-sign-out"
+      size="small"
+      severity="danger"
+    />
+  </div>
+
+  <div class="md:px-8 px-4 flex justify-content-center align-items-center">
+    <div
+      class="container pt-8 flex xl:flex-row flex-column xl:gap-0 gap-6 justify-content-between xl:align-items-start align-items-center"
+    >
+      <div class="xl:w-20rem w-full lg:flex-none flex xl:flex-column xl:gap-3 gap-8">
+        <div
+          class="xl:flex-none flex flex-column justify-content-center align-items-start gap-2 xl:mb-0 mb-3"
+        >
+          <div
+            class="xl:flex-none flex justify-content-center align-items-start gap-2"
+          >
+            <p-avatar icon="pi pi-user" styleClass="mr-2" size="xlarge" />
+            <h2 class="xl:mt-4 xl:mb-2 font-medium" *ngIf="utente.nome != null">
+              {{ utente.nome }} {{ utente.cognome }}
+            </h2>
+
+            <h2 class="xl:mt-4 xl:mb-2 font-medium" *ngIf="utente.ragioneSociale != null">
+              {{ utente.ragioneSociale }}
+            </h2>
+          </div>
+
+          <h4 class="block text-400 font-medium mt-0 p-0 m-0">
+            {{ utente.indirizzoEmail }}
+          </h4>
+        </div>
+
+        <div class="flex flex-column gap-2">
+          <h4 class="mb-2 font-medium">Informazioni personali</h4>
+          <a href="">I miei ordini</a>
+          <a href="">I miei indirizzi di spedizione</a>
+        </div>
+      </div>
+
+      <div class="w-full md:ml-4">
+        <h2 class="m-0 font-medium">Informazioni Personali</h2>
+        <p class="mt-2 text-600">
+          Gestisci le tue informazioni personali, includendo numero di telefono
+          e indirizzo email dove potrai essere contattato.
+        </p>
+
+        <div class="grid mt-4">
+          <div class="col-12 md:col-6">
+            <div class="surface-card shadow-2 p-3 border-round">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                  <span class="block text-500 font-medium mb-3">Nome</span>
+                  <p
+                    class="m-0 text-900 text-md font-medium"
+                    *ngIf="utente.nome != null"
+                  >
+                    {{ utente.nome }} {{ utente.cognome }}
+                  </p>
+                  <h2
+                    class="m-0 text-900 font-medium text-md"
+                    *ngIf="utente.ragioneSociale != null"
+                  >
+                    {{ utente.ragioneSociale }}
+                  </h2>
+                </div>
+                <div
+                  class="flex align-items-center justify-content-center bg-gray-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
+                  <i class="pi pi-user text-md"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="surface-card shadow-2 p-3 border-round">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                  <span class="block text-500 font-medium mb-3"
+                    >Indirizzo Email</span
+                  >
+                  <div class="text-900 font-medium text-md">
+                    {{ utente.indirizzoEmail }}
+                  </div>
+                </div>
+                <div
+                  class="flex align-items-center justify-content-center bg-gray-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
+                  <i class="pi pi-at text-md"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="surface-card shadow-2 p-3 border-round">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                  <span class="block text-500 font-medium mb-3"
+                    >Numero di Telefono</span
+                  >
+                  <div class="text-900 font-medium text-md">
+                    {{ utente.prefisso }} {{ utente.numeroDiTelefono }}
+                  </div>
+                </div>
+                <div
+                  class="flex align-items-center justify-content-center bg-gray-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
+                  <i class="pi pi-phone text-md"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="surface-card shadow-2 p-3 pb-1 border-round">
+              <div class="flex justify-content-between mb-3">
+                <div>
+                  <span class="block text-500 font-medium mb-2 ">Password</span>
+                  <div class="text-900 font-medium text-md">**********</div>
+                  <div class="font-medium text-sm pb-1"><a routerLink="/shop/cambia-password">Cambia password</a></div>
+                </div>
+                <div
+                  class="flex align-items-center justify-content-center bg-gray-100 border-round"
+                  style="width: 2.5rem; height: 2.5rem"
+                >
+                  <i class="pi pi-key text-md"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Dialog per logout -->
+<p-confirmDialog #cd rejectButtonStyleClass="se">
+  <ng-template pTemplate="footer">
+    <button
+      type="button"
+      pButton
+      size="small"
+      icon="pi pi-times"
+      label="Annulla"
+      (click)="cd.reject()"
+    ></button>
+
+    <button
+      type="button"
+      pButton
+      severity="danger"
+      icon="pi pi-check"
+      label="Logout"
+      size="small"
+      (click)="cd.accept()"
+    ></button>
+  </ng-template>
+</p-confirmDialog>
+}

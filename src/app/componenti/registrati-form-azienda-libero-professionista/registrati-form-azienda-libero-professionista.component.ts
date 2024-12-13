@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormPrefissi } from '../../enum/form-prefissi';
 import { FormTipoAttivita } from '../../enum/form-tipo-attivita';
 import { FormProvince } from '../../enum/form-province';
@@ -12,6 +12,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { AccountTipoAttivita } from '../../enum/account-tipo-attivita';
 import { RegistrazioneService } from '../../servizi/registrazione.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
+import { VerificaEmailService } from '../../servizi/verifica-email.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-registrati-form-azienda-libero-professionista',
@@ -24,13 +26,16 @@ import { ResponseCustom } from '../../interfacce/response-custom';
     DropdownModule,
     ButtonModule,
     InputNumberModule,
+
   ],
+  providers: [MessageService],
   templateUrl: './registrati-form-azienda-libero-professionista.component.html',
   styleUrl: './registrati-form-azienda-libero-professionista.component.css',
 })
 export class RegistratiFormAziendaLiberoProfessionistaComponent {
   @Input() nextCallback!: any;
   @Input() attivita!: AccountTipoAttivita;
+  @Output() saveForm = new EventEmitter<FormGroup>();
 
   form!: FormGroup;
   rememberMe: boolean = false;
@@ -49,7 +54,12 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
     numeroTelefono: /^[0-9]{10}$/,
   };
 
-  constructor(private fb: FormBuilder, private registrazioneService: RegistrazioneService) {}
+  constructor(
+    private fb: FormBuilder,
+    private registrazioneService: RegistrazioneService,
+    private verificaEmailService: VerificaEmailService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.form = this.fb.group(
@@ -142,7 +152,7 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
     return this.form.get('password');
   }
 
-  onSubmit() {
+  /* onSubmit() {
     if (this.form.valid) {
       this.registrazioneService
         .aggiungiUtenteAziendaLiberoProfessionista(this.form.value)
@@ -152,6 +162,27 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
           },
           error: (err: ResponseCustom) => {},
         });
+    }
+  } */
+
+  onSubmit() {
+    if (this.form.valid) {
+      const email = this.form.get('indirizzoEmail')!.value;
+
+      this.verificaEmailService.verificaIndirizzoEmail(email).subscribe({
+        next: (res: ResponseCustom) => {
+          this.nextCallback.emit();
+          this.saveForm.emit(this.form);
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: err.error.message,
+            life: 3000,
+          });
+        },
+      });
     }
   }
 }

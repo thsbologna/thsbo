@@ -1,23 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>TH&S Bologna - Shop</title>
-  <base href="/shop">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <head>
+    <meta charset="utf-8" />
+    <title>TH&S Bologna - Shop</title>
+    <base href="/shop" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="TH&S Bologna - Soluzioni informatiche su misura per hardware, software e assistenza. Shop">
-  <meta name="keywords" content="Bologna, Informatica, Hardware, Software, Assistenza, TH&S Bologna, Compuprint, Xerox, Shop, eCommerce, Prodotti, Toner, Nastri, Stampanti, Compuprint, Xerox">
-  <meta name="author" content="TH&S Bologna, Andrea Battista">
-</head>
-<body>
+    <!-- SEO Meta Tags -->
+    <meta
+      name="description"
+      content="TH&S Bologna - Soluzioni informatiche su misura per hardware, software e assistenza. Shop"
+    />
+    <meta
+      name="keywords"
+      content="Bologna, Informatica, Hardware, Software, Assistenza, TH&S Bologna, Compuprint, Xerox, Shop, eCommerce, Prodotti, Toner, Nastri, Stampanti, Compuprint, Xerox"
+    />
+    <meta name="author" content="TH&S Bologna, Andrea Battista" />
+  </head>
+  <body>
+    <section class="pt-8">
+      <p-menubar [model]="items"  >
+        <ng-template #item let-item let-root="root">
+          <a pRipple class="flex items-center p-menubar-item-link">
+            <span class="item-name">{{ item.label }}</span>
+          </a>
+        </ng-template>
+        <ng-template pTemplate="end">
+          <p-avatar
+            *ngIf="isUtenteCollegato"
+            [label]="letteraAccount"
+            size="large"
+            (click)="menu.toggle($event)"
+            class="cursor-pointer"
+            [style]="{ 'background-color': '#F7F7F7' }"
+          />
+          <p-avatar
+            *ngIf="!isUtenteCollegato"
+            icon="pi pi-user"
+            size="large"
+            (click)="menu.toggle($event)"
+            class="cursor-pointer"
+            [style]="{ 'background-color': '#F7F7F7' }"
+            pTooltip="Accedi/Registrati"
+          />
+          <p-tieredMenu #menu [model]="accountItems" [popup]="true" appendTo="body" />
 
-</body>
+          <p-avatar
+            *ngIf="isUtenteCollegato"
+            icon="pi pi-shopping-cart"
+            size="large"
+            pBadge
+            [value]="utente.carrello.elementi.length"
+            badgeSize="large"
+            (click)="carrello.toggle($event)"
+            class="cursor-pointer ml-3"
+            [style]="{ 'background-color': '#F7F7F7' }"
+          />
+          <p-tieredMenu id="carrello" #carrello [model]="elementiCarrello" [popup]="true" appendTo="body" />
+        </ng-template>
+      </p-menubar>
+
+      <router-outlet (activate)="onActivate($event)" class="mt-8" />
+    </section>
+
+    <!-- Dialog per logout -->
+    <p-confirmDialog #cd rejectButtonStyleClass="se" >
+      <ng-template pTemplate="footer">
+        <button type="button" pButton
+
+        size="small"
+            icon="pi pi-times" label="Annulla"
+            (click)="cd.reject()">
+        </button>
+
+        <button type="button" pButton
+          severity="danger"
+            icon="pi pi-check" label="Logout"
+            size="small"
+            (click)="cd.accept()">
+        </button>
+    </ng-template>
+    </p-confirmDialog>
+  </body>
 </html>
-
-<section class="pt-8">
-    <p-megaMenu [model]="items" class="w-full h-full z-2 capitalize" />
-    <router-outlet class="mt-8"/>
-</section>

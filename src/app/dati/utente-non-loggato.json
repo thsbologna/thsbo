@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Login",
+    "icon": "pi pi-sign-in",
+    "routerLink": "/shop/accedi"
+  },
+  {
+    "label": "Registrati",
+    "icon": "pi pi-user-plus",
+    "routerLink": "/shop/registrazione"
+  }
+]

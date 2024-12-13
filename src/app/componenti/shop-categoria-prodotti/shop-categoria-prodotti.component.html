@@ -1,5 +1,6 @@
-<section class="min-h-full">
+<section>
   @if (prodotti) {
+    <p-toast [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }" />
   <p-dataView
     #dv
     [value]="prodotti"
@@ -74,7 +75,7 @@
                     class="flex-auto md:flex-initial white-space-nowrap z-1"
                     size="small"
                     label="Aggiungi al carrello"
-                    (onClick)="faiInviareMail($event)"
+                    (onClick)="aggiungiAlCarrello($event, item)"
                   />
                 </div>
               </div>
@@ -145,7 +146,7 @@
                     icon="pi pi-shopping-cart"
                     class="flex-auto md:flex-initial white-space-nowrap"
                     label="Aggiungi al carrello"
-                    (onClick)="faiInviareMail($event)"
+                    (onClick)="aggiungiAlCarrello($event, prodotto)"
                   />
                 </div>
               </div>

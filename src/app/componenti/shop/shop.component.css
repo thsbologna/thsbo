@@ -1,7 +1,43 @@
-:host ::ng-deep .p-megamenu {
+:host ::ng-deep .p-menubar {
+  margin: 0;
   background-color: white;
   border-radius: 0;
   border-left: none;
   border-right: none;
   border-bottom: none;
+  padding: 20px 25px;
+  z-index: 888;
+  display: flex;
+}
+
+:host ::ng-deep .p-menuitem-link {
+  text-transform: capitalize;
+}
+
+::ng-deep #carrello.p-tieredmenu {
+  width: 30rem !important;
+}
+
+@media screen and (max-width: 960px) {
+  :host ::ng-deep .p-menubar .p-menubar-button {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    transform: translateX(-50%) translateY(-160%);
+    width: 40px;
+    height: 40px;
+  }
+
+  :host ::ng-deep .p-menubar .p-menubar-button svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  :host ::ng-deep .p-menubar-end {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 50px;
+  }
 }

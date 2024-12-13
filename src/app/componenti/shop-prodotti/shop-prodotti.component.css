@@ -1,3 +1,7 @@
+section {
+  min-height: calc(100dvh - 170px);
+}
+
 :host ::ng-deep .p-dialog-footer .p-button {
   width: 100% !important;
 }
@@ -8,4 +12,27 @@
   border-left: none;
   border-right: none;
   border-bottom: none;
+  padding: 20px 20px 0 20px;
+}
+
+:host ::ng-deep .p-dataview-header .p-button {
+  width: auto;
+  padding: 10px 12px;
+}
+
+.nome::first-letter {
+  text-transform: uppercase;
+}
+
+@media screen and (max-width:768px) {
+  img {
+    max-width: 250px;
+    height: 250px;
+  }
+}
+
+@media screen and (max-width:575px) {
+  :host ::ng-deep .p-button {
+    width: 100%;
+  }
 }
