@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class BaseService {
-  baseUrl: string = 'https://thsbologna.it:8080/api';
+  baseUrl: string = 'https://thsbologna.it:9090/api';
 
   constructor() { }
 }
