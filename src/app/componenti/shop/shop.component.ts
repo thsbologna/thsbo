@@ -212,10 +212,6 @@ export class ShopComponent {
         routerLink: '/shop/ordini'
       },
       {
-        label: 'Impostazioni',
-        icon: 'pi pi-cog',
-      },
-      {
         label: 'Esci',
         icon: 'pi pi-sign-out',
         styleClass: 'text-red-500',
