@@ -29,7 +29,6 @@ export class ElementiCarrelloService extends BaseService {
   }
 
   aggiornaQuantitaElemento(idCarrello: any, idProdotto: any, quantita: any) {
-    console.log('Token:', this.token);
     return this.http.put<ResponseCustom>(
       `${this.url}/${idCarrello}/prodotto/${idProdotto}/aggiorna?quantita=${quantita}`, {},
       { headers: this.headers }

@@ -1,3 +1,7 @@
+section {
+  min-height: calc(100dvh - 170px);
+}
+
 .quantity {
   padding: 10px 20px;
 }

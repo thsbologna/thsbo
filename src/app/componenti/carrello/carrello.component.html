@@ -11,8 +11,12 @@
       <div class="flex justify-content-between">
         <h1>Il tuo carrello</h1>
         <div>
-        <h1>Totale {{ carrello.totale | currency: "EUR" }}</h1>
-        <p-button [disabled]="elementiCarrello.length === 0" label="Ordina ora" (onClick)="creaOrdine()"></p-button>
+          <h1>Totale {{ carrello.totale | currency : "EUR" }}</h1>
+          <p-button
+            [disabled]="elementiCarrello.length === 0"
+            label="Ordina ora"
+            (onClick)="creaOrdine()"
+          ></p-button>
         </div>
       </div>
     </ng-template>
@@ -68,15 +72,29 @@
                   ></span>
                 </div>
               </div>
-              <div class="flex md:flex-column md:align-items-end align-items-start">
+              <div
+                class="flex md:flex-column md:align-items-end align-items-start"
+              >
                 <span class="text-xl font-semibold">{{
                   item.prezzo | number : "1.2-2" | currency : "EUR"
                 }}</span>
                 <div class="flex md:flex-row gap-3 align-items-center">
                   <div class="flex align-items-center">
-                    <p-button class="qbutton" icon="pi pi-minus" size="small" (onClick)="decrementaQuantita(item)" />
-                    <p class="quantity border-1 border-round surface-border">{{ item.quantita }}</p>
-                    <p-button class="qbutton" icon="pi pi-plus" size="small" (onClick)="incrementaQuantita(item)" />
+                    <p-button
+                      class="qbutton"
+                      icon="pi pi-minus"
+                      size="small"
+                      (onClick)="decrementaQuantita(item)"
+                    />
+                    <p class="quantity border-1 border-round surface-border">
+                      {{ item.quantita }}
+                    </p>
+                    <p-button
+                      class="qbutton"
+                      icon="pi pi-plus"
+                      size="small"
+                      (onClick)="incrementaQuantita(item)"
+                    />
                   </div>
                   <p-button
                     icon="pi pi-trash"
@@ -94,26 +112,39 @@
     </ng-template>
   </p-dataView>
 
-  <p-confirmDialog #cd rejectButtonStyleClass="se" >
-      <ng-template pTemplate="footer">
-        <button type="button" pButton
+  @if (caricamento) {
+  <div
+    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center opacity-60 z-1"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  }
 
+  <p-confirmDialog #cd rejectButtonStyleClass="se">
+    <ng-template pTemplate="footer">
+      <button
+        type="button"
+        pButton
         size="small"
-            icon="pi pi-times" label="Annulla"
-            (click)="cd.reject()">
-        </button>
+        icon="pi pi-times"
+        label="Annulla"
+        (click)="cd.reject()"
+      ></button>
 
-        <button type="button" pButton
+      <button
+        type="button"
+        pButton
         severity="danger"
-            icon="pi pi-check" label="Rimuovi"
-            size="small"
-            (click)="cd.accept()">
-        </button>
+        icon="pi pi-check"
+        label="Rimuovi"
+        size="small"
+        (click)="cd.accept()"
+      ></button>
     </ng-template>
-    </p-confirmDialog>
+  </p-confirmDialog>
   } @else {
   <div
-    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center"
+    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center opacity-60 z-1"
   >
     <p-progressSpinner ariaLabel="loading" />
   </div>

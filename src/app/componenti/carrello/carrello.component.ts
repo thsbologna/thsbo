@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CarrelloService } from '../../servizi/carrello.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { Carrello } from '../../interfacce/carrello';
@@ -16,6 +16,7 @@ import { FormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { OrdineService } from '../../servizi/ordine.service';
+import { rejects } from 'assert';
 
 @Component({
   selector: 'app-carrello',
@@ -37,9 +38,11 @@ import { OrdineService } from '../../servizi/ordine.service';
   styleUrl: './carrello.component.css',
 })
 export class CarrelloComponent implements OnInit {
+  @Output() carrelloAggiornato = new EventEmitter<any>();
   carrello!: Carrello;
   elementiCarrello: any;
   baseUrl!: string;
+  caricamento: boolean = false;
 
   constructor(
     private carrelloService: CarrelloService,
@@ -51,8 +54,10 @@ export class CarrelloComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.caricamento = true;
     this.baseUrl = this.baseService.baseUrl + '/immagini';
     this.getCarrello();
+    this.caricamento = false;
   }
 
   getCarrello() {
@@ -63,9 +68,15 @@ export class CarrelloComponent implements OnInit {
           next: (res: ResponseCustom) => {
             this.carrello = res.data;
             this.elementiCarrello = this.carrello.elementi;
-            console.log(this.elementiCarrello);
           },
-          error: (err: any) => {},
+          error: (err: any) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Errore',
+              detail: err.error.messaggio,
+              life: 3000,
+            });
+          },
         });
     }
   }
@@ -79,9 +90,10 @@ export class CarrelloComponent implements OnInit {
   }
 
   incrementaQuantita(elementocarrello: any) {
+    this.caricamento = true;
     elementocarrello.quantita++;
 
-    if (this.checkStorage())
+    if (this.checkStorage()) {
       this.elementiCarrelloService
         .aggiornaQuantitaElemento(
           sessionStorage.getItem('carrello'),
@@ -90,6 +102,8 @@ export class CarrelloComponent implements OnInit {
         )
         .subscribe({
           next: (res: ResponseCustom) => {
+            this.carrelloAggiornato.emit();
+            this.caricamento = false;
             this.messageService.add({
               severity: 'success',
               summary: 'Successo',
@@ -99,19 +113,31 @@ export class CarrelloComponent implements OnInit {
 
             this.carrello = { ...res.data };
           },
-          error: (res) => {
+          error: (err) => {
+            this.caricamento = false
             elementocarrello.quantita--;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'errore',
+              detail: err.error.messaggio,
+              life: 3000,
+            });
           },
         });
+    } else {
+      this.caricamento = false;
+    }
+
   }
 
   decrementaQuantita(elementocarrello: any) {
+    this.caricamento = true;
     if (elementocarrello.quantita == 1) {
       this.rimuoviElementoDalCarrello(elementocarrello);
     } else {
       elementocarrello.quantita--;
 
-      if (this.checkStorage())
+      if (this.checkStorage()) {
         this.elementiCarrelloService
           .aggiornaQuantitaElemento(
             sessionStorage.getItem('carrello'),
@@ -120,9 +146,9 @@ export class CarrelloComponent implements OnInit {
           )
           .subscribe({
             next: (res: ResponseCustom) => {
-
+              this.caricamento = false;
               this.carrello = { ...res.data };
-
+              this.carrelloAggiornato.emit();
               this.messageService.add({
                 severity: 'success',
                 summary: 'Successo',
@@ -130,14 +156,25 @@ export class CarrelloComponent implements OnInit {
                 life: 3000,
               });
             },
-            error: (res) => {
+            error: (err) => {
+              this.caricamento = false;
               elementocarrello.quantita++;
+              this.messageService.add({
+                severity: 'error',
+                summary: 'errore',
+                detail: err.error.messaggio,
+                life: 3000,
+              });
             },
           });
+      } else {
+      this.caricamento = false;
     }
-  }
+
+  }}
 
   rimuoviElementoDalCarrello(elementocarrello: any) {
+    this.caricamento = true;
     this.confirmationService.confirm({
       message: 'Sei sicuro/a di voler rimuovere il prodotto dal carrello?',
       header: 'Rimuovi prodotto',
@@ -146,27 +183,46 @@ export class CarrelloComponent implements OnInit {
       accept: () => {
         // servizio rimozione prodotto
         if (this.checkStorage()) {
-          this.elementiCarrelloService.rimuoviElemento(sessionStorage.getItem('carrello'), elementocarrello.prodotto.codice).subscribe({
-            next: (res: ResponseCustom) => {
-              this.carrello = res.data;
-              this.elementiCarrello = [...this.carrello.elementi]
-
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Successo',
-                detail: res.messaggio,
-                life: 3000,
-              });
-            }
-          })
+          this.elementiCarrelloService
+            .rimuoviElemento(
+              sessionStorage.getItem('carrello'),
+              elementocarrello.prodotto.codice
+            )
+            .subscribe({
+              next: (res: ResponseCustom) => {
+                this.carrelloAggiornato.emit();
+                this.carrello = res.data;
+                this.elementiCarrello = [...this.carrello.elementi];
+                this.caricamento = false;
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Successo',
+                  detail: res.messaggio,
+                  life: 3000,
+                });
+              },
+              error: (err: any) => {
+                this.caricamento = false;
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'errore',
+                  detail: err.error.messaggio,
+                  life: 3000,
+                });
+              }
+            });
         }
+
       },
+      reject: () => {
+          this.caricamento = false;
+        }
     });
+
   }
 
   creaOrdine() {
-
-    if(this.checkStorage()) {
+    if (this.checkStorage()) {
       let id =
         sessionStorage!.getItem('utente') !== null
           ? sessionStorage!.getItem('utente')
@@ -180,8 +236,8 @@ export class CarrelloComponent implements OnInit {
             detail: res.messaggio,
             life: 3000,
           });
-        }
-      })
+        },
+      });
     }
   }
 }

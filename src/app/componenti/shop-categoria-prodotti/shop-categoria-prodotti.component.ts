@@ -38,6 +38,7 @@ export class ShopCategoriaProdottiComponent {
   categoriaNome: string = '';
   prodotti!: Prodotto[];
   baseUrl!: string;
+  caricamento: boolean = false;
 
   constructor(
     private route: ActivatedRoute, // Per ottenere il parametro 'nome' dalla rotta
@@ -50,12 +51,14 @@ export class ShopCategoriaProdottiComponent {
   ) {}
 
   ngOnInit() {
+    this.caricamento = true;
     this.baseUrl = this.baseService.baseUrl + '/immagini';
 
     this.route.params.subscribe((params) => {
       this.categoriaNome = params['nome'];
       this.getAll(this.categoriaNome);
     });
+    this.caricamento = false;
   }
 
   getAll(categoriaNome: string): void {
@@ -84,12 +87,14 @@ export class ShopCategoriaProdottiComponent {
 
   aggiungiAlCarrello(event: Event, prodotto: Prodotto) {
     event.stopImmediatePropagation();
+    this.caricamento = true;
 
     if (this.checkStorage()) {
       this.elementiCarrelloService
         .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), prodotto.codice, 1)
         .subscribe({
           next: (res: ResponseCustom) => {
+            this.caricamento = false;
             this.messageService.add({
               severity: 'success',
               summary: 'Successo',

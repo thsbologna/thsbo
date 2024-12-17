@@ -18,6 +18,7 @@ import { BadgeModule } from 'primeng/badge';
 import { Utente } from '../../utente';
 
 import utenteNonLoggato from '../../dati/utente-non-loggato.json';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-shop',
@@ -33,6 +34,7 @@ import utenteNonLoggato from '../../dati/utente-non-loggato.json';
     TieredMenuModule,
     ConfirmDialogModule,
     BadgeModule,
+    ProgressSpinnerModule
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './shop.component.html',
@@ -47,6 +49,7 @@ export class ShopComponent {
   isUtenteCollegato: boolean = false;
   utente!: Utente | null;
   letteraAccount!: any;
+  utenteCaricato: boolean = false;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -57,6 +60,7 @@ export class ShopComponent {
   ) {}
 
   ngOnInit() {
+    this.utenteCaricato = false
     this.getAllCategorie();
 
       let id = sessionStorage!.getItem('utente') || localStorage.getItem('utente');
@@ -83,11 +87,14 @@ export class ShopComponent {
   getUtente(id: any) {
 
     if (id == null || id == undefined ){
+      this.accountItems = utenteNonLoggato as MenuItem[];
+      this.utenteCaricato = true;
       return;
     }
 
     this.utenteService.getUtenteById(id).subscribe({
       next: (res: ResponseCustom) => {
+        this.utenteCaricato = true;
         this.utenteService.setUtente(res.data);
         this.utente = this.utenteService.getUtente();
         this.isUtenteCollegato = true;
@@ -106,8 +113,11 @@ export class ShopComponent {
           this.utente!.ragioneSociale != null
             ? Array.from(this.utente!.ragioneSociale)[0]
             : Array.from(this.utente!.nome)[0];
+
+
       },
       error: (err: any) => {
+        this.utenteCaricato = true;
         this.utente = null;
         this.accountItems = utenteNonLoggato as MenuItem[];
         this.messageService.add({
@@ -118,6 +128,8 @@ export class ShopComponent {
         });
       },
     });
+
+
   }
 
   logout() {
@@ -134,6 +146,14 @@ export class ShopComponent {
           localStorage.removeItem('token');
           localStorage.removeItem('utente');
         }
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successo',
+          detail: "Logout effettuato",
+          life: 3000,
+        });
+
         this.isUtenteCollegato = false;
         this.accountItems = utenteNonLoggato as MenuItem[];
         this.router.navigateByUrl('/shop/prodotti');

@@ -1,6 +1,8 @@
 <section>
   @if (prodotti) {
-    <p-toast [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }" />
+  <p-toast
+    [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"
+  />
   <p-dataView
     #dv
     [value]="prodotti"
@@ -96,9 +98,7 @@
               '/shop/prodotti/prodotto/' + prodotto.codice + '/prodotto'
             "
           >
-            <div
-              class="flex justify-content-center border-round p-3"
-            >
+            <div class="flex justify-content-center border-round p-3">
               <div class="relative mx-auto">
                 <img
                   title="immagine prodotto"
@@ -156,9 +156,16 @@
       </div>
     </ng-template>
   </p-dataView>
-  } @else {
+
+  @if (caricamento) {
   <div
-    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center"
+    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center opacity-60 z-1"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  } } @else {
+  <div
+    class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center opacity-60 z-1"
   >
     <p-progressSpinner ariaLabel="loading" />
   </div>

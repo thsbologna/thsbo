@@ -36,6 +36,7 @@ export class ShopProdottiComponent implements OnInit {
   prodotti!: Prodotto[];
   layout: 'list' | 'grid' = 'list';
   baseUrl!: string;
+  caricamento: boolean = false;
 
   constructor(
     private prodottoService: ProdottoService,
@@ -47,6 +48,7 @@ export class ShopProdottiComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.caricamento = true
     this.baseUrl = this.baseService.baseUrl + '/immagini';
     this.getAllProdotti();
   }
@@ -67,6 +69,8 @@ export class ShopProdottiComponent implements OnInit {
       },
     });
 
+    this.caricamento = false;
+
   }
 
   faiInviareMail(event: Event) {
@@ -83,6 +87,8 @@ export class ShopProdottiComponent implements OnInit {
 
     event.stopImmediatePropagation();
 
+    this.caricamento = true;
+
     if (this.checkStorage()) {
       this.elementiCarrelloService
         .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), prodotto.codice, 1)
@@ -96,7 +102,17 @@ export class ShopProdottiComponent implements OnInit {
             });
 
             this.carrelloAggiornato.emit();
+            this.caricamento = false;
           },
+          error: (err: any) => {
+            this.caricamento = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.messaggio,
+              life: 3000,
+            });
+          }
         });
     } else {
       this.route.navigateByUrl('/shop/accedi');

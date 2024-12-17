@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { LoginService } from '../../servizi/login.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { filter } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-login',
@@ -26,6 +27,7 @@ import { filter } from 'rxjs';
     ReactiveFormsModule,
     RouterModule,
     FormsModule,
+    ProgressSpinnerModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -34,6 +36,7 @@ export class LoginComponent {
   loginForm!: FormGroup;
   rememberMe: boolean = false;
   errore: string = '';
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -65,6 +68,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.loading = true;
     this.errore = '';
 
     if (this.loginForm.valid) {
@@ -87,9 +91,12 @@ export class LoginComponent {
             ? localStorage.setItem('token', res.data.token)
             : sessionStorage.setItem('token', res.data.token);
 
+            this.loading = false;
+
           window.location.reload();
         },
         error: (err: any) => {
+          this.loading = false;
           this.errore = 'Email o Password non validi, riprovare';
         },
       });

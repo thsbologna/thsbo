@@ -157,7 +157,13 @@
     </ng-template>
   </p-dataView>
 } @else {
-  <div class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center">
+  <div class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center z-1 opacity-30">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+}
+
+@if (caricamento) {
+  <div class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center z-1 opacity-30">
     <p-progressSpinner ariaLabel="loading" />
   </div>
 }

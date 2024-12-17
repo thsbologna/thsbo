@@ -27,6 +27,7 @@
           </a>
         </ng-template>
         <ng-template pTemplate="end">
+          @if (utenteCaricato) {
           <p-avatar
             *ngIf="isUtenteCollegato"
             [label]="letteraAccount"
@@ -57,6 +58,9 @@
             class="cursor-pointer ml-3"
             [style]="{ 'background-color': '#F7F7F7' }"
           />
+          } @else {
+            <p-progressSpinner ariaLabel="loading" strokeWidth="4" [style]="{ width: '40px', height: '40px' }" />
+          }
           <p-tieredMenu id="carrello" #carrello [model]="elementiCarrello" [popup]="true" appendTo="body" />
         </ng-template>
       </p-menubar>

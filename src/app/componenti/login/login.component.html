@@ -1,67 +1,115 @@
-<section id="login" class="h-screen flex justify-content-center align-items-center ">
-    <div class="surface-card p-4 mx-4 shadow-2 border-round w-full md:w-30rem">
-        <div class="text-center mb-3">
-            <div class="text-900 text-3xl font-medium mb-1">Bentornato! Accedi</div>
-            <span class="text-600 font-medium line-height-3">Non hai un account?</span>
-            <a class="font-medium no-underline ml-2 text-blue-500 cursor-pointer" routerLink="/shop/registrazione">Registrati</a>
-        </div>
+<section
+  id="login"
+  class="h-screen flex justify-content-center align-items-center"
+>
+@if (!loading) {
+  <div class="surface-card p-4 mx-4 shadow-2 border-round w-full md:w-30rem">
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <div class="field">
-            <!-- Email Field -->
-                <label for="email1" class="block text-900 font-medium mb-2">Email</label>
-                <input
-                    id="email1"
-                    type="text"
-                    placeholder="Inserisci indirizzo email"
-                    pInputText
-                    class="w-full"
-                    formControlName="email"
-                />
-                <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="text-red-500 text-sm mt-2">
-                    <div *ngIf="email?.errors?.['required']">L'email è obbligatoria.</div>
-                    <div *ngIf="email?.errors?.['email']">Inserisci un indirizzo email valido.</div>
-                </div>
-            </div>
-
-            <div class="field">
-                <!-- Password Field -->
-                <label for="password1" class="block text-900 font-medium mb-2">Password</label>
-                <input
-                    id="password1"
-                    type="password"
-                    placeholder="Inserisci password"
-                    pInputText
-                    class="w-full"
-                    formControlName="password"
-                />
-                <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="text-red-500 text-sm mt-2">
-                    <div *ngIf="password?.errors?.['required']">La password è obbligatoria.</div>
-                </div>
-            </div>
-
-                <!-- Remember Me Checkbox -->
-                <div class="flex align-items-center sm:flex-row sm:gap-0 gap-2 flex-column justify-content-between my-4">
-                    <div class="flex align-items-center">
-                        <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2" (onChange)="cambiaStatoRicordami()" [value]="rememberMe"></p-checkbox>
-                        <label for="rememberme1" class="text-900">Ricordami</label>
-                    </div>
-                    <a class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer">Password dimenticata?</a>
-                </div>
-
-                <div *ngIf="errore !== ''">
-                  <p class="text-red-500 text-center">{{ errore }}</p>
-                </div>
-
-                <!-- Submit Button -->
-                <button
-                    pButton
-                    pRipple
-                    label="Log in"
-                    icon="pi pi-user"
-                    class="w-full"
-                    [disabled]="loginForm.invalid"
-                ></button>
-        </form>
+    <div class="text-center mb-3">
+      <div class="text-900 text-3xl font-medium mb-1">Bentornato! Accedi</div>
+      <span class="text-600 font-medium line-height-3"
+        >Non hai un account?</span
+      >
+      <a
+        class="font-medium no-underline ml-2 text-blue-500 cursor-pointer"
+        routerLink="/shop/registrazione"
+        >Registrati</a
+      >
     </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <div class="field">
+        <!-- Email Field -->
+        <label for="email1" class="block text-900 font-medium mb-2"
+          >Email</label
+        >
+        <input
+          id="email1"
+          type="text"
+          placeholder="Inserisci indirizzo email"
+          pInputText
+          class="w-full"
+          formControlName="email"
+        />
+        <div
+          *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+          class="text-red-500 text-sm mt-2"
+        >
+          <div *ngIf="email?.errors?.['required']">L'email è obbligatoria.</div>
+          <div *ngIf="email?.errors?.['email']">
+            Inserisci un indirizzo email valido.
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <!-- Password Field -->
+        <label for="password1" class="block text-900 font-medium mb-2"
+          >Password</label
+        >
+        <input
+          id="password1"
+          type="password"
+          placeholder="Inserisci password"
+          pInputText
+          class="w-full"
+          formControlName="password"
+        />
+        <div
+          *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+          class="text-red-500 text-sm mt-2"
+        >
+          <div *ngIf="password?.errors?.['required']">
+            La password è obbligatoria.
+          </div>
+        </div>
+      </div>
+
+      <!-- Remember Me Checkbox -->
+      <div
+        class="flex align-items-center sm:flex-row sm:gap-0 gap-2 flex-column justify-content-between my-4"
+      >
+        <div class="flex align-items-center">
+          <p-checkbox
+            id="rememberme1"
+            [binary]="true"
+            styleClass="mr-2"
+            (onChange)="cambiaStatoRicordami()"
+            [value]="rememberMe"
+          ></p-checkbox>
+          <label for="rememberme1" class="text-900">Ricordami</label>
+        </div>
+        <a
+          class="font-medium no-underline ml-2 text-blue-500 text-right cursor-pointer"
+          >Password dimenticata?</a
+        >
+      </div>
+
+      <div *ngIf="errore !== ''">
+        <p class="text-red-500 text-center">{{ errore }}</p>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        pButton
+        pRipple
+        label="Log in"
+        icon="pi pi-user"
+        class="w-full"
+        [disabled]="loginForm.invalid"
+      ></button>
+
+
+    </form>
+  </div>
+} @else {
+
+  <div class="surface-300 p-4 mx-4 flex justify-content-center align-items-center shadow-2 border-round w-full md:w-30rem h-20rem opacity-60">
+<p-progressSpinner ariaLabel="loading" />
+
+  </div>
+}
+
+
 </section>
