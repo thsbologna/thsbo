@@ -12,8 +12,6 @@ import { ResponseCustom } from '../../interfacce/response-custom';
 import { BaseService } from '../../servizi/base.service';
 import { ProdottoService } from '../../servizi/prodotto.service';
 import { Meta, Title } from '@angular/platform-browser';
-import { UtenteService } from '../../servizi/utente.service';
-import { Utente } from '../../utente';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +32,7 @@ import { ToastModule } from 'primeng/toast';
     FormsModule,
     ToastModule
   ],
-  providers: [MessageService, ConfirmationService],
+  providers: [MessageService],
   templateUrl: './shop-prodotto-dettagli.component.html',
   styleUrl: './shop-prodotto-dettagli.component.css',
 })

@@ -8,11 +8,12 @@ import { ResponseCustom } from '../../interfacce/response-custom';
 import { UtenteService } from '../../servizi/utente.service';
 import { CommonModule } from '@angular/common';
 import { Utente } from '../../utente';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-shop-profilo-utente',
   standalone: true,
-  imports: [ButtonModule, AvatarModule, ConfirmDialogModule, CommonModule, RouterModule],
+  imports: [ButtonModule, AvatarModule, ConfirmDialogModule, CommonModule, RouterModule, ProgressSpinnerModule],
   providers: [ConfirmationService],
   templateUrl: './shop-profilo-utente.component.html',
   styleUrl: './shop-profilo-utente.component.css',

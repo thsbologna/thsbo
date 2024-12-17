@@ -16,7 +16,7 @@ export class RegistrazioneService extends BaseService {
   aggiungiUtentePrivato(request: any) {
     return this.http.post<ResponseCustom>(
       this.url + '/utente/privato/nuovo',
-      request
+      request,
     );
   }
   aggiungiUtenteAziendaLiberoProfessionista(request: any) {

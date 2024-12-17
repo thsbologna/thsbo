@@ -51,7 +51,7 @@
             icon="pi pi-shopping-cart"
             size="large"
             pBadge
-            [value]="utente.carrello.elementi.length"
+            [value]="utente!.carrello.elementi.length"
             badgeSize="large"
             (click)="carrello.toggle($event)"
             class="cursor-pointer ml-3"

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { ResponseCustom } from '../interfacce/response-custom';
@@ -15,6 +15,6 @@ export class CarrelloService extends BaseService {
   }
 
   getById(id: any) {
-    return this.http.get<ResponseCustom>(this.url + "/carrello/" + id);
+    return this.http.get<ResponseCustom>(this.url + "/carrello/" + id, {headers: this.headers});
   }
 }

@@ -13,39 +13,33 @@ export class ElementiCarrelloService extends BaseService {
     super();
   }
 
-  aggiungiElementoAlCarrello(idCarrello: any, idProdotto: any, quantita: any) {
+  override headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
 
-    const headers = new HttpHeaders({
+  aggiungiElementoAlCarrello(idCarrello: any, idProdotto: any, quantita: any) {
+    const headersEC = new HttpHeaders({
+      'Authorization': `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
 
     return this.http.post<ResponseCustom>(
-      `${this.url}/elemento/aggiungi?carrelloId=${idCarrello}&codiceProdotto=${idProdotto}&quantita=${quantita}`,
-      { headers }
-    );
+      `${this.url}/elemento/aggiungi?carrelloId=${idCarrello}&codiceProdotto=${idProdotto}&quantita=${quantita}`, {}, {headers: this.headers});
   }
 
   aggiornaQuantitaElemento(idCarrello: any, idProdotto: any, quantita: any) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
+    console.log('Token:', this.token);
     return this.http.put<ResponseCustom>(
-      `${this.url}/${idCarrello}/prodotto/${idProdotto}/aggiorna?quantita=${quantita}`,
-      { headers }
+      `${this.url}/${idCarrello}/prodotto/${idProdotto}/aggiorna?quantita=${quantita}`, {},
+      { headers: this.headers }
     );
   }
 
   rimuoviElemento(idCarrello: any, idProdotto: any) {
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
     return this.http.delete<ResponseCustom>(
       `${this.url}/${idCarrello}/prodotto/${idProdotto}/rimuovi`,
-      { headers }
+      { headers: this.headers }
     );
   }
 }

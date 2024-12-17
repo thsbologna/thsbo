@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ConfirmationService, MegaMenuItem, MenuItem } from 'primeng/api';
+import { ConfirmationService, MegaMenuItem, MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -34,7 +34,7 @@ import utenteNonLoggato from '../../dati/utente-non-loggato.json';
     ConfirmDialogModule,
     BadgeModule,
   ],
-  providers: [ConfirmationService],
+  providers: [ConfirmationService, MessageService],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
 })
@@ -45,28 +45,22 @@ export class ShopComponent {
   menuItems!: MenuItem[][];
   categorie: Categoria[] = [];
   isUtenteCollegato: boolean = false;
-  utente!: Utente;
+  utente!: Utente | null;
   letteraAccount!: any;
 
   constructor(
     private categoriaService: CategoriaService,
     private utenteService: UtenteService,
     private confirmationService: ConfirmationService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
     this.getAllCategorie();
 
-    if (this.checkStorage()) {
-      let id =
-        sessionStorage!.getItem('utente') !== null
-          ? sessionStorage!.getItem('utente')
-          : localStorage.getItem('utente');
+      let id = sessionStorage!.getItem('utente') || localStorage.getItem('utente');
       this.getUtente(id);
-    } else {
-      this.accountItems = utenteNonLoggato as MenuItem[];
-    }
   }
 
   getAllCategorie() {
@@ -76,12 +70,22 @@ export class ShopComponent {
         this.headerCategorie();
       },
       error: (err) => {
-        console.error('Errore nel recuperare le categorie:', err);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Errore',
+          detail: err.error.messaggio,
+          life: 3000,
+        });
       },
     });
   }
 
   getUtente(id: any) {
+
+    if (id == null || id == undefined ){
+      return;
+    }
+
     this.utenteService.getUtenteById(id).subscribe({
       next: (res: ResponseCustom) => {
         this.utenteService.setUtente(res.data);
@@ -90,7 +94,7 @@ export class ShopComponent {
         this.accountItems = this.getAccountPulsanti();
 
         sessionStorage.setItem('carrello', res.data.carrello.id);
-        const elementiCarrello = this.utente.carrello.elementi;
+        const elementiCarrello = this.utente!.carrello.elementi;
 
         if (elementiCarrello.length > 0) {
           this.getElementiCarrello();
@@ -99,12 +103,19 @@ export class ShopComponent {
         }
 
         this.letteraAccount =
-          this.utente.ragioneSociale != null
-            ? Array.from(this.utente.ragioneSociale)[0]
-            : Array.from(this.utente.nome)[0];
+          this.utente!.ragioneSociale != null
+            ? Array.from(this.utente!.ragioneSociale)[0]
+            : Array.from(this.utente!.nome)[0];
       },
       error: (err: any) => {
-        console.error(err.error.messaggio);
+        this.utente = null;
+        this.accountItems = utenteNonLoggato as MenuItem[];
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Errore',
+          detail: err.error.message,
+          life: 3000,
+        });
       },
     });
   }
@@ -131,23 +142,22 @@ export class ShopComponent {
   }
 
   onActivate(event: any) {
-    // Se il componente attivato è un componente figlio, aggiorna i dati del carrello
+
     if (event && event.carrelloAggiornato) {
       event.carrelloAggiornato.subscribe(() => {
         if (this.checkStorage()) {
-          let id =
-            sessionStorage!.getItem('utente') !== null
-              ? sessionStorage!.getItem('utente')
-              : localStorage.getItem('utente');
+          let id = sessionStorage!.getItem('utente') || localStorage.getItem('utente');
           this.getUtente(id);
         } else {
           this.accountItems = utenteNonLoggato as MenuItem[];
-        } // Ricarica i dati del carrello
+        }
       });
     }
+
   }
 
   headerCategorie() {
+
     return (this.items = [
       {
         label: 'Tutti i prodotti',
@@ -158,6 +168,7 @@ export class ShopComponent {
         routerLink: '/shop/prodotti/categoria/' + categoria.nome + '/prodotti',
       })),
     ]);
+
   }
 
   checkStorage() {
@@ -178,6 +189,7 @@ export class ShopComponent {
       {
         label: 'I miei ordini',
         icon: 'pi pi-box',
+        routerLink: '/shop/ordini'
       },
       {
         label: 'Impostazioni',
@@ -194,7 +206,7 @@ export class ShopComponent {
 
   getElementiCarrello() {
     return (this.elementiCarrello = [
-      ...this.utente.carrello.elementi.map((elemento: any) => ({
+      ...this.utente!.carrello.elementi.map((elemento: any) => ({
         label: `${elemento.quantita}x ${elemento.prodotto.nome}`,
         routerLink: '/shop/carrello',
 
@@ -217,7 +229,7 @@ export class ShopComponent {
   getElementiCarrelloGenerali() {
     return [
       {
-        label: `Totale: € ${this.utente.carrello.totale.toFixed(2)}`,
+        label: `Totale: € ${this.utente!.carrello.totale.toFixed(2)}`,
         style: { 'font-weight': '600' },
         routerLink: '/shop/carrello',
       },
@@ -226,7 +238,6 @@ export class ShopComponent {
         icon: 'pi pi-arrow-right',
         style: { color: 'blue' },
         routerLink: `/shop/carrello`,
-
       },
     ];
   }

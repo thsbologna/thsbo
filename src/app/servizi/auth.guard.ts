@@ -1,20 +1,15 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { UtenteService } from './utente.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
+  const utenteService = inject(UtenteService);
 
-  if (typeof window !== 'undefined') {
-    if (
-      sessionStorage!.getItem('utente') != null ||
-      localStorage!.getItem('utente') != null
-    ) {
-      return true;
-    } else {
-      router.navigateByUrl('/shop/accedi');
-      return false;
+
+    if (utenteService.getUtente() == null || utenteService.getUtente() == undefined) {
+        return false;
     }
-  }
 
-  return false;
+  return true;
 };

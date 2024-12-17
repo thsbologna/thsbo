@@ -52,6 +52,7 @@ export class ShopProdottiComponent implements OnInit {
   }
 
   getAllProdotti() {
+
     this.prodottoService.getAll().subscribe({
       next: (res: ResponseCustom) => {
         this.prodotti = res.data;
@@ -65,6 +66,7 @@ export class ShopProdottiComponent implements OnInit {
         });
       },
     });
+
   }
 
   faiInviareMail(event: Event) {
@@ -78,6 +80,7 @@ export class ShopProdottiComponent implements OnInit {
   }
 
   aggiungiAlCarrello(event: Event, prodotto: Prodotto) {
+
     event.stopImmediatePropagation();
 
     if (this.checkStorage()) {

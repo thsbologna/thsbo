@@ -1,0 +1,82 @@
+<section class="p-4">
+  @if (ordine) {
+  <p-dataView #dv [value]="elementiOrdine" row>
+    <ng-template pTemplate="header">
+      <div class="flex justify-content-between">
+        <h1>Ordine numero #WOU1{{ ordine.id }}</h1>
+        <h1>Totale {{ ordine.totale | currency : "EUR" }}</h1>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="list" let-elementiOrdine>
+      <div class="grid grid-nogutter">
+        <div
+          class="col-12"
+          *ngFor="let item of elementiOrdine; let first = first"
+          class="col-12"
+        >
+          <div
+            class="flex flex-column hover:surface-50 sm:flex-row sm:align-items-center p-3 gap-3 z-2"
+            [ngClass]="{ 'border-top-1 surface-border': !first }"
+          >
+            <div class="sm:w-10rem relative">
+              <img
+                title="immagine prodotto"
+                *ngIf="item.prodotto.immagine"
+                class="block xl:block mx-auto border-round w-full"
+                [src]="baseUrl + item.prodotto.immagine.url"
+                [alt]="item.prodotto.nome"
+              />
+              <img
+                title="immagine prodotto"
+                *ngIf="item.prodotto.immagine == null"
+                class="block xl:block mx-auto border-round w-full"
+                src="/images/Image-not-found.png"
+                [alt]="item.prodotto.nome"
+              />
+            </div>
+            <div
+              class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4"
+            >
+              <div
+                class="flex flex-row md:flex-column justify-content-between align-items-start gap-2"
+              >
+                <div>
+                  <span class="font-medium text-secondary text-sm capitalize">{{
+                    item.prodotto.categoria.nome
+                  }}</span>
+                  <div class="text-lg font-medium text-900 my-2 lowercase nome">
+                    {{ item.prodotto.nome }}
+                  </div>
+                  <span
+                    class="font-medium text-primary text-sm cursor-pointer"
+                    [routerLink]="
+                      '/shop/prodotti/prodotto/' +
+                      item.prodotto.codice +
+                      '/prodotto'
+                    "
+                  >
+                    Vedi dettagli <i class="pi pi-arrow-right"></i
+                  ></span>
+                </div>
+              </div>
+              <div
+                class="flex md:flex-column md:align-items-end align-items-start"
+              >
+                <span class="text-xl font-semibold">{{
+                  item.prezzo | number : "1.2-2" | currency : "EUR"
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataView>
+  } @else {
+  <div
+    class="surface-300 absolute top-0 bottom-0 left-0 h-screen w-screen flex justify-content-center align-items-center"
+  >
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+  }
+</section>

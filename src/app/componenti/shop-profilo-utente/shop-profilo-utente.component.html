@@ -1,5 +1,6 @@
-@if (utente) {
 <section class="top-0 h-screen">
+
+  @if (utente) {
   <div
     class="w-full sm:px-8 px-4 py-3 surface-600 flex justify-content-between align-items-center"
   >
@@ -10,6 +11,7 @@
       icon="pi pi-sign-out"
       size="small"
       severity="danger"
+      routerLink="/shop/prodotti"
     />
   </div>
 
@@ -41,7 +43,7 @@
 
         <div class="flex flex-column gap-2">
           <h4 class="mb-2 font-medium">Informazioni personali</h4>
-          <a href="">I miei ordini</a>
+          <a routerLink="/shop/ordini">I miei ordini</a>
           <a href="">I miei indirizzi di spedizione</a>
         </div>
       </div>
@@ -142,9 +144,8 @@
       </div>
     </div>
   </div>
-</section>
 
-<!-- Dialog per logout -->
+  <!-- Dialog per logout -->
 <p-confirmDialog #cd rejectButtonStyleClass="se">
   <ng-template pTemplate="footer">
     <button
@@ -167,4 +168,12 @@
     ></button>
   </ng-template>
 </p-confirmDialog>
+} @else {
+  <div class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
 }
+</section>
+
+
+

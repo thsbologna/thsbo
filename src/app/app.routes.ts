@@ -13,6 +13,8 @@ import { ShopProfiloUtenteComponent } from './componenti/shop-profilo-utente/sho
 import { authGuard } from './servizi/auth.guard';
 import { CarrelloComponent } from './componenti/carrello/carrello.component';
 import { AggiornaPasswordComponent } from './componenti/aggiorna-password/aggiorna-password.component';
+import { OrdiniComponent } from './componenti/ordini/ordini.component';
+import { OrdineDettagliComponent } from './componenti/ordine-dettagli/ordine-dettagli.component';
 
 export const routes: Routes = [
   {
@@ -77,6 +79,17 @@ export const routes: Routes = [
         title: 'TH&S Bologna SRL - Cambia password Account',
         canActivate: [authGuard],
       },
+      {
+        path: 'ordini',
+        component: OrdiniComponent,
+        title: 'TH&S Bologna SRL - I tuoi ordini',
+        canActivate: [authGuard],
+      },
+      {
+        path: 'ordini/ordine/:numero/dettagli',
+        component: OrdineDettagliComponent,
+        canActivate: [authGuard]
+      }
     ],
   },
   {

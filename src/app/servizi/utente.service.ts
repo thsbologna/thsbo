@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { HttpClient } from '@angular/common/http';
 import { ResponseCustom } from '../interfacce/response-custom';
-import { Utente } from '../utente';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -18,7 +17,7 @@ export class UtenteService extends BaseService {
   }
 
   getUtenteById(id: any) {
-    return this.http.get<ResponseCustom>(this.url + '/utente/' + id);
+    return this.http.get<ResponseCustom>(this.url + '/utente/' + id, {headers: this.headers});
   }
 
   setUtente(data: any) {

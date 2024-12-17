@@ -1,0 +1,30 @@
+<section class="px-4">
+
+  @if (ordini) {
+<h1 class="">I tuoi ordini</h1>
+
+  <p-toast />
+  <p-table [value]="ordini">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Numero Ordine</th>
+            <th>Prezzo</th>
+            <th>Data</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ordine>
+        <tr class="cursor-pointer hover:surface-50 w-full h-5rem" [routerLink]="
+              '/shop/ordini/ordine/' + ordine.id + '/dettagli'
+            ">
+            <td>WOU1{{ ordine.id }}</td>
+            <td>{{ ordine.totale | number: "1.2-2" | currency: "EUR" }}</td>
+            <td>{{ ordine.data | date: "YYYY-MM-dd hh:mm:ss" }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+  } @else {
+    <div class="surface-300 absolute top-0 bottom-0 left-0 h-screen  w-screen flex justify-content-center align-items-center">
+    <p-progressSpinner ariaLabel="loading" />
+  </div>
+}
+</section>
