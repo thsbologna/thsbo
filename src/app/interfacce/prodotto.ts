@@ -12,4 +12,6 @@ export interface Prodotto {
     ultimaModifica: string;
     categoria: Categoria | null;
     immagine: any;
+    consumabili: string;
+    codiceProduttore: string;
 }

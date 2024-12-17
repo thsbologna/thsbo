@@ -17,6 +17,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { OrdineService } from '../../servizi/ordine.service';
 import { rejects } from 'assert';
+import { error } from 'console';
 
 @Component({
   selector: 'app-carrello',
@@ -114,7 +115,7 @@ export class CarrelloComponent implements OnInit {
             this.carrello = { ...res.data };
           },
           error: (err) => {
-            this.caricamento = false
+            this.caricamento = false;
             elementocarrello.quantita--;
             this.messageService.add({
               severity: 'error',
@@ -127,7 +128,6 @@ export class CarrelloComponent implements OnInit {
     } else {
       this.caricamento = false;
     }
-
   }
 
   decrementaQuantita(elementocarrello: any) {
@@ -168,10 +168,10 @@ export class CarrelloComponent implements OnInit {
             },
           });
       } else {
-      this.caricamento = false;
+        this.caricamento = false;
+      }
     }
-
-  }}
+  }
 
   rimuoviElementoDalCarrello(elementocarrello: any) {
     this.caricamento = true;
@@ -209,16 +209,14 @@ export class CarrelloComponent implements OnInit {
                   detail: err.error.messaggio,
                   life: 3000,
                 });
-              }
+              },
             });
         }
-
       },
       reject: () => {
-          this.caricamento = false;
-        }
+        this.caricamento = false;
+      },
     });
-
   }
 
   creaOrdine() {
@@ -234,6 +232,14 @@ export class CarrelloComponent implements OnInit {
             severity: 'success',
             summary: 'Successo',
             detail: res.messaggio,
+            life: 3000,
+          });
+        },
+        error: (err: any) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: err.error.messaggio,
             life: 3000,
           });
         },

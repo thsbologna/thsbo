@@ -16,6 +16,7 @@ import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
+import { LineBreakPipe } from '../../line-break.pipe';
 
 @Component({
   selector: 'app-shop-prodotto-dettagli',
@@ -30,7 +31,8 @@ import { ToastModule } from 'primeng/toast';
     ProgressSpinnerModule,
     InputNumberModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    LineBreakPipe
   ],
   providers: [MessageService],
   templateUrl: './shop-prodotto-dettagli.component.html',
@@ -65,10 +67,16 @@ export class ShopProdottoDettagliComponent {
     });
   }
 
+  transform(consumabili: string): string {
+    if (!consumabili) return consumabili; // Se non c'è nulla, ritorna il valore originale
+    return consumabili.replace(/\|/g, '<br>'); // Sostituisce ogni '|' con <br>
+  }
+
   getProdotto(codice: string): void {
     this.prodottoService.getByCodice(codice).subscribe({
       next: (res: ResponseCustom) => {
         this.prodotto = { ...res.data };
+        this.prodotto.consumabili = this.transform(this.prodotto.consumabili);
 
         this.titleService.setTitle(`${this.prodotto.nome} - TH&S Bologna`);
         this.metaService.updateTag({
@@ -115,7 +123,11 @@ export class ShopProdottoDettagliComponent {
 
     if (this.checkStorage()) {
       this.elementiCarrelloService
-        .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), this.prodotto.codice, this.quantita)
+        .aggiungiElementoAlCarrello(
+          sessionStorage.getItem('carrello'),
+          this.prodotto.codice,
+          this.quantita
+        )
         .subscribe({
           next: (res: ResponseCustom) => {
             this.messageService.add({

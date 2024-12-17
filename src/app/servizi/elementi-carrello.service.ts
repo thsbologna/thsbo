@@ -19,11 +19,6 @@ export class ElementiCarrelloService extends BaseService {
   });
 
   aggiungiElementoAlCarrello(idCarrello: any, idProdotto: any, quantita: any) {
-    const headersEC = new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`,
-      'Content-Type': 'application/json',
-    });
-
     return this.http.post<ResponseCustom>(
       `${this.url}/elemento/aggiungi?carrelloId=${idCarrello}&codiceProdotto=${idProdotto}&quantita=${quantita}`, {}, {headers: this.headers});
   }

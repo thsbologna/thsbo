@@ -47,7 +47,7 @@ export class ShopProfiloUtenteComponent implements OnInit {
           localStorage.removeItem('token');
           localStorage.removeItem('utente');
         }
-
+        this.utenteService.setUtente(null);
         window.location.reload();
       },
     });

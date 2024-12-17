@@ -8,16 +8,35 @@
     row
   >
     <ng-template pTemplate="header">
-      <div class="flex justify-content-between">
-        <h1>Il tuo carrello</h1>
-        <div>
-          <h1>Totale {{ carrello.totale | currency : "EUR" }}</h1>
-          <p-button
-            [disabled]="elementiCarrello.length === 0"
-            label="Ordina ora"
-            (onClick)="creaOrdine()"
-          ></p-button>
+      <div class="flex flex-column justify-content-between">
+        <span
+          class="text-red-500 text-sm w-full text-center"
+          *ngIf="carrello.totale > 0 && carrello.totale < 250"
+        >
+          Aggiungi €{{ carrello.totale - 15.0 }} per usufruire della spedizione gratuita</span
+        >
+
+        <div class="flex justify-content-between w-full">
+          <div class="flex flex-column align-items-start">
+            <h1>Il tuo carrello</h1>
+          </div>
+          <div class="flex flex-column justify-content-end align-items-end">
+            <h1 *ngIf="carrello.totale > 0 && carrello.totale < 250">
+              Totale: {{ carrello.totale + 15.0 | currency : "EUR" }}
+            </h1>
+
+            <h1 *ngIf="carrello.totale >= 250">
+              Totale: {{ carrello.totale | currency : "EUR" }}
+            </h1>
+            <p-button
+              [disabled]="elementiCarrello.length === 0"
+              label="Ordina ora"
+              (onClick)="creaOrdine()"
+            ></p-button>
+          </div>
         </div>
+
+
       </div>
     </ng-template>
     <ng-template pTemplate="list" let-elementiCarrello>
