@@ -1,17 +1,17 @@
 import { Categoria } from "./categoria";
 
 export interface Prodotto {
-    codice: string;
-    nome: string;
-    descrizione: string;
-    prezzo: number | null;
-    stato: number | null;
-    disponibilita: number | null;
-    giorniConsegnaMin: number | null;
-    giorniConsegnaMax: number | null;
-    ultimaModifica: string;
-    categoria: Categoria | null;
-    immagine: any;
-    consumabili: string;
-    codiceProduttore: string;
+  codice: string;
+  codiceProduttore: string;
+  nome: string;
+  descrizione: string;
+  consumabili: string;
+  prezzo: number | null;
+  stato: number | null;
+  disponibilita: number | null;
+  giorniConsegnaMin: number | null;
+  giorniConsegnaMax: number | null;
+  ultimaModifica: string;
+  categoria: Categoria | null;
+  immagine: any;
 }

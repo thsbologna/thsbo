@@ -16,7 +16,7 @@ import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
-import { LineBreakPipe } from '../../line-break.pipe';
+import { LineBreakPipe } from '../../servizi/line-break.pipe';
 
 @Component({
   selector: 'app-shop-prodotto-dettagli',
@@ -40,7 +40,7 @@ import { LineBreakPipe } from '../../line-break.pipe';
 })
 export class ShopProdottoDettagliComponent {
   @Output() carrelloAggiornato = new EventEmitter<any>();
-  codice: string = '';
+  codiceProdotto: string = '';
   prodotto!: Prodotto;
   baseUrl!: string;
   footer: string = 'Dettagli prodotto';
@@ -62,8 +62,8 @@ export class ShopProdottoDettagliComponent {
     this.baseUrl = this.baseService.baseUrl + '/immagini';
 
     this.route.params.subscribe((params) => {
-      this.codice = params['codice'];
-      this.getProdotto(this.codice);
+      this.codiceProdotto = params['codice'];
+      this.getProdotto(this.codiceProdotto);
     });
   }
 

@@ -11,10 +11,9 @@ import { LoginComponent } from './componenti/login/login.component';
 import { RegistratiComponent } from './componenti/registrati/registrati.component';
 import { ShopProfiloUtenteComponent } from './componenti/shop-profilo-utente/shop-profilo-utente.component';
 import { authGuard } from './servizi/auth.guard';
-import { CarrelloComponent } from './componenti/carrello/carrello.component';
-import { AggiornaPasswordComponent } from './componenti/aggiorna-password/aggiorna-password.component';
 import { OrdiniComponent } from './componenti/ordini/ordini.component';
 import { OrdineDettagliComponent } from './componenti/ordine-dettagli/ordine-dettagli.component';
+import { ShopCarrelloComponent } from './componenti/shop-carrello/shop-carrello.component';
 
 export const routes: Routes = [
   {
@@ -69,16 +68,16 @@ export const routes: Routes = [
       },
       {
         path: 'carrello',
-        component: CarrelloComponent,
+        component: ShopCarrelloComponent,
         title: 'TH&S Bologna SRL - Il tuo carrello',
         canActivate: [authGuard],
       },
-      {
+      /* {
         path: 'cambia-password',
         component: AggiornaPasswordComponent,
         title: 'TH&S Bologna SRL - Cambia password Account',
         canActivate: [authGuard],
-      },
+      }, */
       {
         path: 'ordini',
         component: OrdiniComponent,

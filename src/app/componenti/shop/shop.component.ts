@@ -1,6 +1,11 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { ConfirmationService, MegaMenuItem, MenuItem, MessageService } from 'primeng/api';
+import {
+  ConfirmationService,
+  MegaMenuItem,
+  MenuItem,
+  MessageService,
+} from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -15,7 +20,7 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 import { UtenteService } from '../../servizi/utente.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { BadgeModule } from 'primeng/badge';
-import { Utente } from '../../utente';
+import { Utente } from '../../interfacce/utente';
 
 import utenteNonLoggato from '../../dati/utente-non-loggato.json';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
@@ -34,7 +39,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     TieredMenuModule,
     ConfirmDialogModule,
     BadgeModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
   ],
   providers: [ConfirmationService, MessageService],
   templateUrl: './shop.component.html',
@@ -49,7 +54,7 @@ export class ShopComponent {
   isUtenteCollegato: boolean = false;
   utente!: Utente | null;
   letteraAccount!: any;
-  utenteCaricato: boolean = false;
+  isUtenteCaricato!: boolean;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -60,76 +65,37 @@ export class ShopComponent {
   ) {}
 
   ngOnInit() {
-    this.utenteCaricato = false
+    this.isUtenteCaricato = false;
     this.getAllCategorie();
-
-      let id = sessionStorage!.getItem('utente') || localStorage.getItem('utente');
-      this.getUtente(id);
+    this.getUtente();
   }
 
   getAllCategorie() {
     this.categoriaService.getAll().subscribe({
       next: (res: ResponseCustom) => {
         this.categorie = res.data;
-        this.headerCategorie();
+        this.getHeaderCategorie();
       },
       error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Errore',
-          detail: err.error.messaggio,
-          life: 3000,
-        });
+        this.getMessaggioErrore(err);
       },
     });
   }
 
-  getUtente(id: any) {
+  getUtente() {
+    const id = this.getIdUtente();
 
-    if (id == null || id == undefined ){
+    if (id == null || id == undefined) {
+      sessionStorage.removeItem('token');
+      sessionStorage.removeItem('utente');
+      localStorage.removeItem('token');
+      localStorage.removeItem('utente');
       this.accountItems = utenteNonLoggato as MenuItem[];
-      this.utenteCaricato = true;
+      this.isUtenteCaricato = true;
       return;
     }
 
-    this.utenteService.getUtenteById(id).subscribe({
-      next: (res: ResponseCustom) => {
-        this.utenteCaricato = true;
-        this.utenteService.setUtente(res.data);
-        this.utente = this.utenteService.getUtente();
-        this.isUtenteCollegato = true;
-        this.accountItems = this.getAccountPulsanti();
-
-        sessionStorage.setItem('carrello', res.data.carrello.id);
-        const elementiCarrello = this.utente!.carrello.elementi;
-
-        if (elementiCarrello.length > 0) {
-          this.getElementiCarrello();
-        } else {
-          this.getCarrelloVuoto();
-        }
-
-        this.letteraAccount =
-          this.utente!.ragioneSociale != null
-            ? Array.from(this.utente!.ragioneSociale)[0]
-            : Array.from(this.utente!.nome)[0];
-
-
-      },
-      error: (err: any) => {
-        this.utenteCaricato = true;
-        this.utente = null;
-        this.accountItems = utenteNonLoggato as MenuItem[];
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Errore',
-          detail: err.error.message,
-          life: 3000,
-        });
-      },
-    });
-
-
+    this.getUtenteDalServer();
   }
 
   logout() {
@@ -142,42 +108,44 @@ export class ShopComponent {
         if (this.checkStorage()) {
           sessionStorage.removeItem('token');
           sessionStorage.removeItem('utente');
-        } else {
           localStorage.removeItem('token');
           localStorage.removeItem('utente');
+
+          this.utenteService.setUtente(null);
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: 'Logout effettuato',
+            life: 3000,
+          });
+
+          this.isUtenteCollegato = false;
+
+          this.accountItems = utenteNonLoggato as MenuItem[];
+          this.router.navigateByUrl('/shop/prodotti');
+        } else {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Errore',
+            detail: 'Errore nel logout, riprovare',
+            life: 3000,
+          });
+
         }
-
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Successo',
-          detail: "Logout effettuato",
-          life: 3000,
-        });
-
-        this.isUtenteCollegato = false;
-        this.accountItems = utenteNonLoggato as MenuItem[];
-        this.router.navigateByUrl('/shop/prodotti');
       },
     });
   }
 
   onActivate(event: any) {
-
     if (event && event.carrelloAggiornato) {
       event.carrelloAggiornato.subscribe(() => {
-        if (this.checkStorage()) {
-          let id = sessionStorage!.getItem('utente') || localStorage.getItem('utente');
-          this.getUtente(id);
-        } else {
-          this.accountItems = utenteNonLoggato as MenuItem[];
-        }
+        this.getUtente();
       });
     }
-
   }
 
-  headerCategorie() {
-
+  getHeaderCategorie() {
     return (this.items = [
       {
         label: 'Tutti i prodotti',
@@ -188,7 +156,6 @@ export class ShopComponent {
         routerLink: '/shop/prodotti/categoria/' + categoria.nome + '/prodotti',
       })),
     ]);
-
   }
 
   checkStorage() {
@@ -209,7 +176,7 @@ export class ShopComponent {
       {
         label: 'I miei ordini',
         icon: 'pi pi-box',
-        routerLink: '/shop/ordini'
+        routerLink: '/shop/ordini',
       },
       {
         label: 'Esci',
@@ -220,12 +187,64 @@ export class ShopComponent {
     ];
   }
 
+  getIdUtente() {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('utente') || localStorage.getItem('utente');
+    }
+
+    return null;
+  }
+
+  getUtenteDalServer() {
+    this.utenteService.getUtenteById(this.getIdUtente()).subscribe({
+      next: (res: ResponseCustom) => {
+        this.utente = res.data;
+        this.utenteService.setUtente(this.utente);
+        this.isUtenteCaricato = true;
+        this.isUtenteCollegato = true;
+        this.accountItems = this.getAccountPulsanti();
+        sessionStorage.setItem('carrello', res.data.carrello.id);
+        this.setElementiCarrello();
+        this.setIconaAccount();
+      },
+      error: (err: any) => {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('utente');
+        localStorage.removeItem('token');
+        localStorage.removeItem('utente');
+        this.utente = null;
+        this.isUtenteCaricato = true;
+        this.isUtenteCollegato = false;
+        this.accountItems = utenteNonLoggato as MenuItem[];
+        this.getMessaggioErrore(err);
+      },
+    });
+  }
+
+  getMessaggioErrore(err: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Errore',
+      detail: err.error.messaggio,
+      life: 3000,
+    });
+  }
+
+  setElementiCarrello() {
+    var elementiCarrello = this.utente!.carrello.elementi;
+
+    if (elementiCarrello.length > 0) {
+      this.getElementiCarrello();
+    } else {
+      this.getCarrelloVuoto();
+    }
+  }
+
   getElementiCarrello() {
     return (this.elementiCarrello = [
       ...this.utente!.carrello.elementi.map((elemento: any) => ({
         label: `${elemento.quantita}x ${elemento.prodotto.nome}`,
         routerLink: '/shop/carrello',
-
       })),
       ...this.getElementiCarrelloGenerali(),
     ]);
@@ -256,5 +275,12 @@ export class ShopComponent {
         routerLink: `/shop/carrello`,
       },
     ];
+  }
+
+  setIconaAccount() {
+    this.letteraAccount =
+      this.utente!.ragioneSociale != null
+        ? Array.from(this.utente!.ragioneSociale)[0]
+        : Array.from(this.utente!.nome)[0];
   }
 }

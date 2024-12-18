@@ -12,4 +12,8 @@ export interface Utente {
   password: string;
   ordini: any[];
   carrello: any;
+  comune: String;
+  via: string;
+  civico: string;
+  cap: number
 }

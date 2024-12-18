@@ -7,7 +7,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { UtenteService } from '../../servizi/utente.service';
 import { CommonModule } from '@angular/common';
-import { Utente } from '../../utente';
+import { Utente } from '../../interfacce/utente';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
@@ -47,7 +47,6 @@ export class ShopProfiloUtenteComponent implements OnInit {
           localStorage.removeItem('token');
           localStorage.removeItem('utente');
         }
-        this.utenteService.setUtente(null);
         window.location.reload();
       },
     });

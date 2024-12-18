@@ -12,6 +12,12 @@ section {
   border-left: none;
   border-right: none;
   border-bottom: none;
+  padding: 20px 20px 0 20px;
+}
+
+:host ::ng-deep .p-dataview-header .p-button {
+  width: auto;
+  padding: 10px 12px;
 }
 
 @media screen and (max-width:768px) {

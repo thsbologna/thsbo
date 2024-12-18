@@ -46,7 +46,7 @@
         <div class="grid grid-nogutter w-full gap-3">
             <div class="col field flex flex-column">
                 <p-dropdown id="provincia" [options]="province" formControlName="provincia"
-                    class="block text-overflow-ellipsis" required placeholder="Selezionare provincia di residenza" />
+                    class="block text-overflow-ellipsis" required placeholder="Provincia di residenza" />
                 <small *ngIf="form.get('provincia')?.touched && form.get('provincia')?.invalid" class="p-error">
                     Provincia obbligatoria.
                 </small>
@@ -55,7 +55,7 @@
             <div class="col  field flex flex-column">
                 <p-dropdown id="prefisso" [options]="prefissi" formControlName="prefisso" optionLabel="label"
                     optionValue="value" class="block text-overflow-ellipsis" required
-                    placeholder="Selezionare prefisso telefonico" />
+                    placeholder="Prefisso telefonico" />
                 <small *ngIf="form.get('prefisso')?.touched && form.get('prefisso')?.invalid" class="p-error">
                     Prefisso obbligatorio.
                 </small>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="field flex flex-column">
-            <p-inputNumber placeholder="Numero di Telefono" mode="decimal" [useGrouping]="false" id="numeroDiTelefono"
+            <input pInputText placeholder="Numero di Telefono" mode="decimal" id="numeroDiTelefono"
                 formControlName="numeroDiTelefono" />
             <small *ngIf="form.get('numeroDiTelefono')?.touched && form.get('numeroDiTelefono')?.invalid"
                 class="p-error">

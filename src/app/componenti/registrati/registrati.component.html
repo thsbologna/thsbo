@@ -1,64 +1,142 @@
 <p-stepper [linear]="true" [orientation]="'vertical'">
-    <p-stepperPanel header="Scegli tipo di account">
-        <ng-template pTemplate="content" let-nextCallback="nextCallback" let-index="index">
-            <div class="flex flex-column pb-8">
-                <div class="flex flex-column justify-content-center align-items-center font-medium">
-                    <h1>Quale tipo di account vuoi creare?</h1>
-                    <div>
-                        <p-selectButton class="w-full" [options]="tipiAttivita" [(ngModel)]="tipoAccount" optionLabel="value"
-                            optionValue="label" />
-                    </div>
-                </div>
-            </div>
-            <div class="flex pt-4 justify-content-end">
-                <p-button label="Successivo" icon="pi pi-arrow-right" iconPos="right" [disabled]="tipoAccount === null" (onClick)="vaiAlForm(nextCallback)" />
-            </div>
-        </ng-template>
-    </p-stepperPanel>
-    <p-stepperPanel header="Compila il form di registrazione">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-            let-index="index">
-            <div class="flex flex-column pb-3">
-                <div *ngIf="isPrivato"
-                    class="flex-auto flex justify-content-center align-items-center font-medium w-full">
-                    <app-registrati-form-privato (saveForm)="setFormPrivato($event)" class="w-full" [nextCallback]="nextCallback" />
-                </div>
-                <div *ngIf="!isPrivato"
-                    class="flex-auto flex justify-content-center align-items-center font-medium">
-                    <app-registrati-form-azienda-libero-professionista (saveForm)="setFormAziendaLiberoProfessionista($event)" class="w-full" [attivita]="tipoAccount!" [nextCallback]="nextCallback" />
-                </div>
-            </div>
-            <div class="flex pt-4 justify-content-between">
-                <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
-            </div>
-        </ng-template>
-    </p-stepperPanel>
-    <p-stepperPanel header="Inserisci codice di verifica">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-nextCallback="nextCallback"
-            let-index="index" >
-            <div class="w-full flex justify-content-center align-items-center ">
-              <div class="md:w-8 w-full flex flex-column justify-content-center align-items-center pb-3">
-                <p>Inserire il codice di verifica inviato all'indirizzo email inserito in precedenza</p>
-                <div class="flex gap-3">
-                  <p-inputNumber [(ngModel)]="codiceVerifica" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" />
-                  <p-button label="Invia" (onClick)="checkCodice(nextCallback)"></p-button>
-              </div>
-                </div>
-            </div>
-            <div class="flex pt-4 justify-content-between">
-                <p-button label="Back" icon="pi pi-arrow-left" (onClick)="prevCallback.emit()" />
-            </div>
-        </ng-template>
-    </p-stepperPanel>
-    <p-stepperPanel header="Accoun creato">
-        <ng-template pTemplate="content" let-prevCallback="prevCallback" let-index="index">
-            <div class="flex flex-column pb-8">
-                <div
-                    class="flex flex-column justify-content-center align-items-center font-medium">
-                    <p>Successo! Account creato correttamente</p>
-                    <p-button label="Effettua il login" size="small" routerLink="/shop/accedi"></p-button>
-                </div>
-            </div>
-        </ng-template>
-    </p-stepperPanel>
+  <p-stepperPanel header="Scegli tipo di account">
+    <ng-template
+      pTemplate="content"
+      let-nextCallback="nextCallback"
+      let-index="index"
+    >
+      <div class="flex flex-column pb-8">
+        <div
+          class="flex flex-column justify-content-center align-items-center font-medium"
+        >
+          <h1>Quale tipo di account vuoi creare?</h1>
+          <div>
+            <p-selectButton
+              class="w-full"
+              [options]="tipiAttivita"
+              [(ngModel)]="tipoAccount"
+              optionLabel="value"
+              optionValue="label"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="flex pt-4 justify-content-end">
+        <p-button
+          label="Successivo"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          [disabled]="tipoAccount === null"
+          (onClick)="vaiAlForm(nextCallback)"
+        />
+      </div>
+    </ng-template>
+  </p-stepperPanel>
+  <p-stepperPanel header="Compila il form di registrazione">
+    <ng-template
+      pTemplate="content"
+      let-prevCallback="prevCallback"
+      let-nextCallback="nextCallback"
+      let-index="index"
+    >
+      <div class="flex flex-column pb-3">
+        <div
+          *ngIf="isPrivato"
+          class="flex-auto flex justify-content-center align-items-center font-medium w-full"
+        >
+          <app-registrati-form-privato
+            (saveForm)="setFormPrivato($event)"
+            class="w-full"
+            [nextCallback]="nextCallback"
+          />
+        </div>
+        <div
+          *ngIf="!isPrivato"
+          class="flex-auto flex justify-content-center align-items-center font-medium"
+        >
+          <app-registrati-form-azienda-libero-professionista
+            (saveForm)="setFormAziendaLiberoProfessionista($event)"
+            onActiva
+            class="w-full"
+            onActivate
+            [attivita]="tipoAccount!"
+            [nextCallback]="nextCallback"
+          />
+        </div>
+      </div>
+      <div class="flex pt-4 justify-content-between">
+        <p-button
+          label="Back"
+          icon="pi pi-arrow-left"
+          (onClick)="prevCallback.emit()"
+        />
+      </div>
+    </ng-template>
+  </p-stepperPanel>
+  <p-stepperPanel header="Inserisci codice di verifica">
+    <ng-template
+      pTemplate="content"
+      let-prevCallback="prevCallback"
+      let-nextCallback="nextCallback"
+      let-index="index"
+    >
+      <div class="w-full flex justify-content-center align-items-center">
+        <div
+          class="md:w-8 w-full flex flex-column justify-content-center align-items-center pb-3"
+        >
+          <p>
+            Inserire il codice di verifica inviato all'indirizzo email inserito
+            in precedenza
+          </p>
+          <div class="flex gap-3">
+            <p-inputNumber
+              [(ngModel)]="codiceVerifica"
+              mode="decimal"
+              inputId="withoutgrouping"
+              [useGrouping]="false"
+            />
+            <p-button
+              label="Invia"
+              (onClick)="checkCodice(nextCallback)"
+            ></p-button>
+          </div>
+        </div>
+      </div>
+      <div class="flex pt-4 justify-content-between">
+        <p-button
+          label="Back"
+          icon="pi pi-arrow-left"
+          (onClick)="prevCallback.emit()"
+        />
+      </div>
+    </ng-template>
+  </p-stepperPanel>
+  <p-stepperPanel header="Accoun creato">
+    <ng-template
+      pTemplate="content"
+      let-prevCallback="prevCallback"
+      let-index="index"
+    >
+      <div class="flex flex-column pb-8">
+        <div
+          class="flex flex-column justify-content-center align-items-center font-medium"
+        >
+          <p>Successo! Account creato correttamente</p>
+          <p-button
+            label="Effettua il login"
+            size="small"
+            routerLink="/shop/accedi"
+          ></p-button>
+        </div>
+      </div>
+    </ng-template>
+  </p-stepperPanel>
 </p-stepper>
+
+@if (caricamento) {
+<div
+  class="fixed surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center z-1 opacity-60"
+>
+  <p-progressSpinner ariaLabel="loading" />
+</div>
+}

@@ -27,7 +27,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ReactiveFormsModule,
     RouterModule,
     FormsModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -45,11 +45,9 @@ export class LoginComponent {
   ) {}
 
   ngOnInit() {
-    if (
-      typeof window !== 'undefined' &&
-      (sessionStorage!.getItem('utente') != null ||
-        localStorage!.getItem('utente') != null)
-    ) {
+    this.loading = true;
+    if (this.checkStorage()) {
+      this.loading = false;
       this.route.navigateByUrl('/shop/prodotti');
     }
 
@@ -57,6 +55,16 @@ export class LoginComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]],
     });
+
+    this.loading = false;
+  }
+
+  checkStorage() {
+    return (
+      typeof window !== 'undefined' &&
+      (sessionStorage!.getItem('utente') != null ||
+        localStorage!.getItem('utente') != null)
+    );
   }
 
   get email() {
@@ -91,7 +99,7 @@ export class LoginComponent {
             ? localStorage.setItem('token', res.data.token)
             : sessionStorage.setItem('token', res.data.token);
 
-            this.loading = false;
+          this.loading = false;
 
           window.location.reload();
         },

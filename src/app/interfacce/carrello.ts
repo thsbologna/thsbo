@@ -1,5 +1,7 @@
+import { ElementoCarrello } from "./elemento-carrello";
+
 export interface Carrello {
   id: number;
-  elementi: any;
+  elementi: ElementoCarrello[];
   totale: number;
 }

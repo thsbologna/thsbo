@@ -1,26 +1,24 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CarrelloService } from '../../servizi/carrello.service';
-import { ResponseCustom } from '../../interfacce/response-custom';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Carrello } from '../../interfacce/carrello';
-import { DataViewModule } from 'primeng/dataview';
-import { CommonModule } from '@angular/common';
-import { TagModule } from 'primeng/tag';
-import { ButtonModule } from 'primeng/button';
-import { RouterModule } from '@angular/router';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ResponseCustom } from '../../interfacce/response-custom';
 import { BaseService } from '../../servizi/base.service';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { InputNumber, InputNumberModule } from 'primeng/inputnumber';
-import { FormsModule } from '@angular/forms';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CarrelloService } from '../../servizi/carrello.service';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { OrdineService } from '../../servizi/ordine.service';
-import { rejects } from 'assert';
-import { error } from 'console';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DataViewModule } from 'primeng/dataview';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { TagModule } from 'primeng/tag';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
-  selector: 'app-carrello',
+  selector: 'app-shop-carrello',
   standalone: true,
   imports: [
     DataViewModule,
@@ -35,10 +33,10 @@ import { error } from 'console';
     ConfirmDialogModule,
   ],
   providers: [MessageService, ConfirmationService],
-  templateUrl: './carrello.component.html',
-  styleUrl: './carrello.component.css',
+  templateUrl: './shop-carrello.component.html',
+  styleUrl: './shop-carrello.component.css',
 })
-export class CarrelloComponent implements OnInit {
+export class ShopCarrelloComponent {
   @Output() carrelloAggiornato = new EventEmitter<any>();
   carrello!: Carrello;
   elementiCarrello: any;
@@ -220,30 +218,44 @@ export class CarrelloComponent implements OnInit {
   }
 
   creaOrdine() {
-    if (this.checkStorage()) {
-      let id =
-        sessionStorage!.getItem('utente') !== null
-          ? sessionStorage!.getItem('utente')
-          : localStorage.getItem('utente');
+    this.confirmationService.confirm({
+      header: 'Conferma Ordine',
+      message:
+        "Al momento il servizio di acquisto diretto dal sito non e' disponibile. Una volta confermato questo pop-up l'ordine verra' inoltrato e sarete contattati al piu' presto per organizzare la spedizione e la modalita' di pagamento.",
+      accept: () => {
+        if (this.checkStorage()) {
+          let id =
+            sessionStorage!.getItem('utente') !== null
+              ? sessionStorage!.getItem('utente')
+              : localStorage.getItem('utente');
 
-      this.ordineService.creaOrdine(id).subscribe({
-        next: (res: ResponseCustom) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Successo',
-            detail: res.messaggio,
-            life: 3000,
+          this.ordineService.creaOrdine(id).subscribe({
+            next: (res: ResponseCustom) => {
+              this.messageService.add({
+                severity: 'success',
+                summary: 'Successo',
+                detail: res.messaggio,
+                life: 3000,
+              });
+            },
+            error: (err: any) => {
+              this.messageService.add({
+                severity: 'error',
+                summary: 'Errore',
+                detail: err.error.messaggio,
+                life: 3000,
+              });
+            },
           });
-        },
-        error: (err: any) => {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Errore',
-            detail: err.error.messaggio,
-            life: 3000,
-          });
-        },
-      });
-    }
+        }
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Rifiutato',
+          detail: "L'ordine non e' andato a buon fine",
+        });
+      },
+    });
   }
 }

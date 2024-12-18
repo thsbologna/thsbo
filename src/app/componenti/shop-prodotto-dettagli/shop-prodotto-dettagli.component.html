@@ -49,7 +49,7 @@
       <p [innerHTML]="prodotto.consumabili | lineBreak" class="m-0 p-0 mb-3"></p>
       <p class="block text-4xl mx-0 mt-2 mb-2">
         Prezzo:
-        <span class="font-semibold">€ {{ prodotto.prezzo }}</span>
+        <span class="font-semibold">€ {{ prodotto.prezzo }} <span *ngIf="prodotto.prezzo! < 250"> + €15.00 spedizione</span></span>
       </p>
       <p class="block mx-0 mt-2 mb-2">
         Giorni di consegna: Da

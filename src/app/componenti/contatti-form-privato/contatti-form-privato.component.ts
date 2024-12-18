@@ -41,7 +41,7 @@ export class ContattiFormPrivatoComponent {
     codiceFiscale: /^[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-EHLMPRST](?:[0-9LMNPQRSTUV]{2})(?:[A-Z]{1})(?:[0-9LMNPQRSTUV]{3})([A-Z]{1})$/,
     codiceFiscaleAzienda: /^[A-Z]{6}\d{2}\w{2}\d{3}[A-Z]$/,
     partitaIVA: /^[0-9]{11}$/,
-    numeroTelefono: /^[0-9]{10}$/,
+    numeroTelefono: /^[0-9]{9,10}$/,
   };
 
   constructor(private formBuilder: FormBuilder, private emailService: EmailService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
@@ -80,7 +80,7 @@ export class ContattiFormPrivatoComponent {
       indirizzoEmail: ['', [Validators.required, Validators.email]],
       provincia: ['', Validators.required],
       prefisso: ['', Validators.required],
-      numeroDiTelefono: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(this.regexPatterns.numeroTelefono)]],
+      numeroDiTelefono: [null, [Validators.required, Validators.minLength(9), Validators.maxLength(10), Validators.pattern(this.regexPatterns.numeroTelefono)]],
       messaggio: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(10000)]],
     });
   }

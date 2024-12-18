@@ -79,6 +79,8 @@
                   <div class="text-lg font-medium text-900 my-2 lowercase nome">
                     {{ item.prodotto.nome }}
                   </div>
+                  <div
+                    class="font-medium text-sm"> {{ item.prodotto.prezzo | currency: "EUR" }}</div>
                   <span
                     class="font-medium text-primary text-sm cursor-pointer"
                     [routerLink]="
@@ -138,29 +140,6 @@
     <p-progressSpinner ariaLabel="loading" />
   </div>
   }
-
-  <p-confirmDialog #cd rejectButtonStyleClass="se">
-    <ng-template pTemplate="footer">
-      <button
-        type="button"
-        pButton
-        size="small"
-        icon="pi pi-times"
-        label="Annulla"
-        (click)="cd.reject()"
-      ></button>
-
-      <button
-        type="button"
-        pButton
-        severity="danger"
-        icon="pi pi-check"
-        label="Rimuovi"
-        size="small"
-        (click)="cd.accept()"
-      ></button>
-    </ng-template>
-  </p-confirmDialog>
   } @else {
   <div
     class="surface-300 absolute top-0 bottom-0 h-screen w-screen flex justify-content-center align-items-center opacity-60 z-1"
@@ -168,4 +147,22 @@
     <p-progressSpinner ariaLabel="loading" />
   </div>
   }
+
+  <p-confirmDialog #cd rejectButtonStyleClass="se" [style]="{'max-width': '30rem'}" >
+      <ng-template pTemplate="footer">
+        <button type="button" pButton
+
+        size="small"
+            icon="pi pi-times" label="Annulla"
+            severity="danger"
+            (click)="cd.reject()">
+        </button>
+
+        <button type="button" pButton
+            icon="pi pi-check" label="Conferma"
+            size="small"
+            (click)="cd.accept()">
+        </button>
+    </ng-template>
+    </p-confirmDialog>
 </section>

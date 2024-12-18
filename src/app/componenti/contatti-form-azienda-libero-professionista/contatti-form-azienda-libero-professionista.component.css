@@ -5,3 +5,10 @@
 ::ng-deep .p-button {
   width: 100% !important;
 }
+
+:host ::ng-deep p-inputnumber:placeholder-shown,
+::ng-deep .p-inputnumber:placeholder-shown,
+::ng-deep .p-input-number-input:placeholder-shown,
+::ng-deep .p-dropdown:placeholder-shown {
+  text-overflow: ellipsis;
+}

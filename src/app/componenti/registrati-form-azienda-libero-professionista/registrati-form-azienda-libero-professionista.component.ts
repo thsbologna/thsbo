@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormPrefissi } from '../../enum/form-prefissi';
 import { FormTipoAttivita } from '../../enum/form-tipo-attivita';
 import { FormProvince } from '../../enum/form-province';
@@ -14,6 +14,7 @@ import { RegistrazioneService } from '../../servizi/registrazione.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { VerificaEmailService } from '../../servizi/verifica-email.service';
 import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-registrati-form-azienda-libero-professionista',
@@ -26,7 +27,7 @@ import { MessageService } from 'primeng/api';
     DropdownModule,
     ButtonModule,
     InputNumberModule,
-
+    ProgressSpinnerModule
   ],
   providers: [MessageService],
   templateUrl: './registrati-form-azienda-libero-professionista.component.html',
@@ -36,10 +37,9 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
   @Input() nextCallback!: any;
   @Input() attivita!: AccountTipoAttivita;
   @Output() saveForm = new EventEmitter<FormGroup>();
-
+caricamento:boolean = false;
   form!: FormGroup;
   rememberMe: boolean = false;
-
   tipoAttivita: FormTipoAttivita[] = [];
   province: FormProvince[] = [];
   prefissi: any[] = [];
@@ -84,25 +84,37 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
             Validators.pattern(this.regexPatterns.partitaIVA),
           ],
         ],
-        tipoAttivita: [this.attivita, Validators.required],
+        tipoAttivita: ['', Validators.required],
         provincia: ['', Validators.required],
         prefisso: ['', Validators.required],
         numeroDiTelefono: [
           null,
           [
             Validators.required,
-            Validators.minLength(10),
+            Validators.minLength(9),
             Validators.maxLength(10),
             Validators.pattern(this.regexPatterns.numeroTelefono),
           ],
         ],
         password: ['', [Validators.required]],
         ripetiPassword: ['', [Validators.required]],
+        comune: ['', Validators.required],
+        via: ['', Validators.required],
+        civico: ['', Validators.required],
+        cap: ['', Validators.required],
       },
       { validator: this.passwordsMatchValidator }
     );
 
     this.caricaDropdowns();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['attivita']) {
+      this.form.patchValue({
+        tipoAttivita: this.attivita,
+      });
+    }
   }
 
   taxCodeValidator(): ValidatorFn {
@@ -140,7 +152,6 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
       value: FormPrefissi[key as keyof typeof FormPrefissi],
       label: `${key}  ${FormPrefissi[key as keyof typeof FormPrefissi]}`, // Concatenazione di key e value
     }));
-    this.tipoAttivita = [...Object.values(FormTipoAttivita)];
     this.province = [...Object.values(FormProvince)];
   }
 
@@ -152,29 +163,25 @@ export class RegistratiFormAziendaLiberoProfessionistaComponent {
     return this.form.get('password');
   }
 
-  /* onSubmit() {
-    if (this.form.valid) {
-      this.registrazioneService
-        .aggiungiUtenteAziendaLiberoProfessionista(this.form.value)
-        .subscribe({
-          next: (res: ResponseCustom) => {
-            this.nextCallback.emit();
-          },
-          error: (err: ResponseCustom) => {},
-        });
+  onActivate(event: any) {
+    if (event && event.cambiaAttivita) {
+      event.cambiaAttivita.subscribe();
     }
-  } */
+  }
 
   onSubmit() {
     if (this.form.valid) {
+      this.caricamento = true;
       const email = this.form.get('indirizzoEmail')!.value;
 
       this.verificaEmailService.verificaIndirizzoEmail(email).subscribe({
         next: (res: ResponseCustom) => {
+          this.caricamento = false;
           this.nextCallback.emit();
           this.saveForm.emit(this.form);
         },
         error: (err) => {
+          this.caricamento = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Errore',

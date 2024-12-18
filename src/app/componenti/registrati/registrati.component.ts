@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -19,6 +19,9 @@ import { UtenteService } from '../../servizi/utente.service';
 import { RegistrazioneService } from '../../servizi/registrazione.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { VerificaEmailService } from '../../servizi/verifica-email.service';
+import { EventEmitter } from 'stream';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-registrati',
@@ -33,13 +36,16 @@ import { VerificaEmailService } from '../../servizi/verifica-email.service';
     RouterModule,
     RegistratiFormPrivatoComponent,
     RegistratiFormAziendaLiberoProfessionistaComponent,
+    ProgressSpinnerModule
   ],
+  providers: [MessageService],
   templateUrl: './registrati.component.html',
   styleUrl: './registrati.component.css',
 })
 export class RegistratiComponent implements OnInit {
   @Input() isUtenteCollegato!: boolean;
 
+  caricamento: boolean = false;
   privatoForm!: FormGroup;
   aziendaLiberoProfessionistaForm!: FormGroup;
   tipoAccount!: AccountTipoAttivita | null;
@@ -51,7 +57,8 @@ export class RegistratiComponent implements OnInit {
     private route: Router,
     private fb: FormBuilder,
     private registrazioneService: RegistrazioneService,
-    private verificaEmailService: VerificaEmailService
+    private verificaEmailService: VerificaEmailService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -84,46 +91,69 @@ export class RegistratiComponent implements OnInit {
   }
 
   setFormAziendaLiberoProfessionista(form: FormGroup) {
-    this.aziendaLiberoProfessionistaForm.patchValue(form.value)
+    this.aziendaLiberoProfessionistaForm.patchValue(form.value);
   }
 
   registraUtente(nextCallback: any) {
+    this.caricamento = true;
     if (this.isPrivato) {
       this.registrazioneService
         .aggiungiUtentePrivato(this.privatoForm.value)
         .subscribe({
           next: (res: ResponseCustom) => {
+            this.caricamento = false;
             nextCallback.emit();
           },
-          error: (err: ResponseCustom) => {},
+          error: (err: any) => {
+            this.caricamento = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Errore',
+              detail: err.error.message,
+              life: 3000,
+            });
+          },
         });
     } else {
       this.registrazioneService
-        .aggiungiUtenteAziendaLiberoProfessionista(this.aziendaLiberoProfessionistaForm.value)
+        .aggiungiUtenteAziendaLiberoProfessionista(
+          this.aziendaLiberoProfessionistaForm.value
+        )
         .subscribe({
           next: (res: ResponseCustom) => {
+            this.caricamento = false;
             nextCallback.emit();
           },
-          error: (err: ResponseCustom) => {},
+          error: (err: any) => {
+            this.caricamento = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Errore',
+              detail: err.error.message,
+              life: 3000,
+            });
+          },
         });
     }
   }
 
   checkCodice(nextCallback: any) {
-      this.verificaEmailService
-        .checkCodice(
-          this.privatoForm!.get('indirizzoEmail')!.value,
-          this.codiceVerifica
-        )
-        .subscribe({
-          next: (res: ResponseCustom) => {
-            this.registraUtente(nextCallback);
-          },
-          error: (err) => {
-            console.error(err.error.messaggio);
-          },
-        });
-
+    this.caricamento = true;
+    this.verificaEmailService
+      .checkCodice(
+        this.privatoForm!.get('indirizzoEmail')!.value,
+        this.codiceVerifica
+      )
+      .subscribe({
+        next: (res: ResponseCustom) => {
+          this.caricamento = false;
+          this.registraUtente(nextCallback);
+        },
+        error: (err) => {
+          this.caricamento = false;
+          console.error(err.error.messaggio);
+        },
+      });
   }
 
   generaFormPrivato() {
@@ -150,45 +180,50 @@ export class RegistratiComponent implements OnInit {
       ],
       password: ['', [Validators.required]],
       ripetiPassword: ['', [Validators.required]],
+      comune: ['', Validators.required],
+      via: ['', Validators.required],
+      civico: ['', Validators.required],
+      cap: ['', Validators.required],
     });
   }
 
   generaFormAziendaLiberoProfessionista() {
-    this.aziendaLiberoProfessionistaForm = this.fb.group(
-      {
-        ragioneSociale: ['', [Validators.required, Validators.maxLength(60)]],
-        codiceFiscale: [
-          '',
-          [
-            Validators.required,
-            Validators.minLength(11),
-            Validators.maxLength(16),
-          ],
+    this.aziendaLiberoProfessionistaForm = this.fb.group({
+      ragioneSociale: ['', [Validators.required, Validators.maxLength(60)]],
+      codiceFiscale: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(11),
+          Validators.maxLength(16),
         ],
-        indirizzoEmail: ['', [Validators.required, Validators.email]],
-        partitaIVA: [
-          null,
-          [
-            Validators.required,
-            Validators.minLength(11),
-            Validators.maxLength(11),
-          ],
+      ],
+      indirizzoEmail: ['', [Validators.required, Validators.email]],
+      partitaIVA: [
+        null,
+        [
+          Validators.required,
+          Validators.minLength(11),
+          Validators.maxLength(11),
         ],
-        tipoAttivita: ['', Validators.required],
-        provincia: ['', Validators.required],
-        prefisso: ['', Validators.required],
-        numeroDiTelefono: [
-          null,
-          [
-            Validators.required,
-            Validators.minLength(10),
-            Validators.maxLength(10),
-
-          ],
+      ],
+      tipoAttivita: ['', Validators.required],
+      provincia: ['', Validators.required],
+      prefisso: ['', Validators.required],
+      numeroDiTelefono: [
+        null,
+        [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(10),
         ],
-        password: ['', [Validators.required]],
-        ripetiPassword: ['', [Validators.required]],
-      },
-    );
+      ],
+      password: ['', [Validators.required]],
+      ripetiPassword: ['', [Validators.required]],
+      comune: ['', Validators.required],
+      via: ['', Validators.required],
+      civico: ['', Validators.required],
+      cap: ['', Validators.required],
+    });
   }
 }

@@ -22,6 +22,7 @@ import { RegistrazioneService } from '../../servizi/registrazione.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
 import { VerificaEmailService } from '../../servizi/verifica-email.service';
 import { MessageService } from 'primeng/api';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-registrati-form-privato',
@@ -35,6 +36,7 @@ import { MessageService } from 'primeng/api';
     DropdownModule,
     InputTextareaModule,
     PasswordModule,
+    ProgressSpinnerModule,
   ],
   providers: [MessageService],
   templateUrl: './registrati-form-privato.component.html',
@@ -43,10 +45,9 @@ import { MessageService } from 'primeng/api';
 export class RegistratiFormPrivatoComponent {
   @Input() nextCallback!: any;
   @Output() saveForm = new EventEmitter<FormGroup>();
-
+  caricamento: boolean = false;
   form!: FormGroup;
   rememberMe: boolean = false;
-
   tipoAttivita: FormTipoAttivita[] = [];
   province: FormProvince[] = [];
   prefissi: any[] = [];
@@ -95,6 +96,10 @@ export class RegistratiFormPrivatoComponent {
         ],
         password: ['', [Validators.required]],
         ripetiPassword: ['', [Validators.required]],
+        comune: ['', Validators.required],
+        via: ['', Validators.required],
+        civico: ['', Validators.required],
+        cap: ['', Validators.required],
       },
       { validator: this.passwordsMatchValidator }
     );
@@ -143,15 +148,17 @@ export class RegistratiFormPrivatoComponent {
 
   onSubmit() {
     if (this.form.valid) {
-
+      this.caricamento = true;
       const email = this.form.get('indirizzoEmail')!.value;
 
       this.verificaEmailService.verificaIndirizzoEmail(email).subscribe({
         next: (res: ResponseCustom) => {
+          this.caricamento = false;
           this.nextCallback.emit();
-          this.saveForm.emit(this.form)
+          this.saveForm.emit(this.form);
         },
         error: (err) => {
+          this.caricamento = false;
           this.messageService.add({
             severity: 'error',
             summary: 'Errore',

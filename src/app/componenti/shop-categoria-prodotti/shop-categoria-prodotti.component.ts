@@ -11,7 +11,7 @@ import { ResponseCustom } from '../../interfacce/response-custom';
 import { BaseService } from '../../servizi/base.service';
 import { ProdottoService } from '../../servizi/prodotto.service';
 import { UtenteService } from '../../servizi/utente.service';
-import { Utente } from '../../utente';
+import { Utente } from '../../interfacce/utente';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { ToastModule } from 'primeng/toast';
 
