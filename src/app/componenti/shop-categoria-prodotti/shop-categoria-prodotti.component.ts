@@ -14,6 +14,7 @@ import { UtenteService } from '../../servizi/utente.service';
 import { Utente } from '../../interfacce/utente';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { ToastModule } from 'primeng/toast';
+import { AuthService } from '../../servizi/auth.service';
 
 @Component({
   selector: 'app-shop-categoria-prodotti',
@@ -25,7 +26,7 @@ import { ToastModule } from 'primeng/toast';
     RouterModule,
     ConfirmDialogModule,
     ProgressSpinnerModule,
-    ToastModule
+    ToastModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './shop-categoria-prodotti.component.html',
@@ -45,7 +46,7 @@ export class ShopCategoriaProdottiComponent {
     private prodottoService: ProdottoService,
     private baseService: BaseService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private authService: AuthService,
     private router: Router,
     private elementiCarrelloService: ElementiCarrelloService
   ) {}
@@ -77,40 +78,54 @@ export class ShopCategoriaProdottiComponent {
     });
   }
 
-  checkStorage() {
-    return (
-      typeof window !== 'undefined' &&
-      (sessionStorage!.getItem('utente') != null ||
-        localStorage!.getItem('utente') != null)
-    );
-  }
-
   aggiungiAlCarrello(event: Event, prodotto: Prodotto) {
     event.stopImmediatePropagation();
+
     this.caricamento = true;
 
-    if (this.checkStorage()) {
-      this.elementiCarrelloService
-        .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), prodotto.codice, 1)
-        .subscribe({
-          next: (res: ResponseCustom) => {
-            this.caricamento = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successo',
-              detail: res.messaggio,
-              life: 2000,
-            });
-
-            this.carrelloAggiornato.emit();
-          },
-        });
+    if (this.authService.isLoggedIn()) {
+      this.aggiungiProdottoAlCarrello(prodotto);
     } else {
       this.router.navigateByUrl('/shop/accedi');
     }
   }
 
-  faiInviareMail(event: Event) {
+  aggiungiProdottoAlCarrello(prodotto: Prodotto) {
+    var utente: Utente =
+      JSON.parse(sessionStorage.getItem('utente')!) ||
+      JSON.parse(localStorage.getItem('utente')!);
+
+    this.elementiCarrelloService
+      .aggiungiElementoAlCarrello(utente.carrello.id, prodotto.codice, 1)
+      .subscribe({
+        next: (res: ResponseCustom) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: res.messaggio,
+            life: 2000,
+          });
+
+          utente.carrello = res.data;
+          sessionStorage.setItem('utente', JSON.stringify(utente));
+          localStorage.setItem('utente', JSON.stringify(utente));
+
+          this.carrelloAggiornato.emit();
+          this.caricamento = false;
+        },
+        error: (err: any) => {
+          this.caricamento = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.messaggio,
+            life: 3000,
+          });
+        },
+      });
+  }
+
+  /* faiInviareMail(event: Event) {
     event.stopPropagation();
 
     this.confirmationService.confirm({
@@ -118,5 +133,5 @@ export class ShopCategoriaProdottiComponent {
         this.router.navigateByUrl('/contatti');
       },
     });
-  }
+  } */
 }

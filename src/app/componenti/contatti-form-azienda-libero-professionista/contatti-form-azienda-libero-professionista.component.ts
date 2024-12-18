@@ -33,7 +33,7 @@ export class ContattiFormAziendaLiberoProfessionistaComponent {
   tipoAttivita: FormTipoAttivita[] = [];
   province: FormProvince[] = [];
   prefissi: any[] = [];
-  comuni: any[] = [];
+
   email!: MailAziendaLiberoProfessionista;
 
   // Regular expressions

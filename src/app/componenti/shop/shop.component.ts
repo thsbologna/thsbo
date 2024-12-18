@@ -24,6 +24,7 @@ import { Utente } from '../../interfacce/utente';
 
 import utenteNonLoggato from '../../dati/utente-non-loggato.json';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AuthService } from '../../servizi/auth.service';
 
 @Component({
   selector: 'app-shop',
@@ -61,7 +62,8 @@ export class ShopComponent {
     private utenteService: UtenteService,
     private confirmationService: ConfirmationService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -83,35 +85,33 @@ export class ShopComponent {
   }
 
   getUtente() {
-    const id = this.getIdUtente();
-
-    if (id == null || id == undefined) {
-      sessionStorage.removeItem('token');
-      sessionStorage.removeItem('utente');
-      localStorage.removeItem('token');
-      localStorage.removeItem('utente');
-      this.accountItems = utenteNonLoggato as MenuItem[];
+    if (this.authService.isLoggedIn()) {
+      this.authService.checkSessionExpiry();
+      this.utente =
+        JSON.parse(localStorage.getItem('utente')!) ||
+        JSON.parse(sessionStorage.getItem('utente')!);
+      this.accountItems = this.getAccountPulsanti();
+      this.setIconaAccount();
+      this.isUtenteCollegato = true;
+      this.setElementiCarrello();
       this.isUtenteCaricato = true;
-      return;
+    } else {
+      this.accountItems = utenteNonLoggato as MenuItem[];
+      this.isUtenteCollegato = false;
+      this.isUtenteCaricato = true;
     }
-
-    this.getUtenteDalServer();
   }
 
   logout() {
+this.isUtenteCaricato = false;
     this.confirmationService.confirm({
       message: 'Sei sicuro/a di voler effettuare il logout?',
       header: 'Conferma logout',
       closeOnEscape: true,
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        if (this.checkStorage()) {
-          sessionStorage.removeItem('token');
-          sessionStorage.removeItem('utente');
-          localStorage.removeItem('token');
-          localStorage.removeItem('utente');
 
-          this.utenteService.setUtente(null);
+        this.authService.logout();
 
           this.messageService.add({
             severity: 'success',
@@ -121,25 +121,23 @@ export class ShopComponent {
           });
 
           this.isUtenteCollegato = false;
-
           this.accountItems = utenteNonLoggato as MenuItem[];
+          this.isUtenteCaricato = true;
           this.router.navigateByUrl('/shop/prodotti');
-        } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Errore',
-            detail: 'Errore nel logout, riprovare',
-            life: 3000,
-          });
-
-        }
       },
+      reject: () => {
+        this.isUtenteCaricato = true;
+      }
     });
   }
 
   onActivate(event: any) {
     if (event && event.carrelloAggiornato) {
       event.carrelloAggiornato.subscribe(() => {
+        this.getUtente();
+      });
+    } else if(event && event.caricaUtente) {
+      event.caricaUtente.subscribe(() => {
         this.getUtente();
       });
     }
@@ -185,40 +183,6 @@ export class ShopComponent {
         command: () => this.logout(),
       },
     ];
-  }
-
-  getIdUtente() {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('utente') || localStorage.getItem('utente');
-    }
-
-    return null;
-  }
-
-  getUtenteDalServer() {
-    this.utenteService.getUtenteById(this.getIdUtente()).subscribe({
-      next: (res: ResponseCustom) => {
-        this.utente = res.data;
-        this.utenteService.setUtente(this.utente);
-        this.isUtenteCaricato = true;
-        this.isUtenteCollegato = true;
-        this.accountItems = this.getAccountPulsanti();
-        sessionStorage.setItem('carrello', res.data.carrello.id);
-        this.setElementiCarrello();
-        this.setIconaAccount();
-      },
-      error: (err: any) => {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('utente');
-        localStorage.removeItem('token');
-        localStorage.removeItem('utente');
-        this.utente = null;
-        this.isUtenteCaricato = true;
-        this.isUtenteCollegato = false;
-        this.accountItems = utenteNonLoggato as MenuItem[];
-        this.getMessaggioErrore(err);
-      },
-    });
   }
 
   getMessaggioErrore(err: any) {

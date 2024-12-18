@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,14 +7,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { NavigationEnd, Route, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
-import { LoginService } from '../../servizi/login.service';
 import { ResponseCustom } from '../../interfacce/response-custom';
-import { filter } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { AuthService } from '../../servizi/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -33,6 +32,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  @Output() caricaUtente = new EventEmitter<any>();
   loginForm!: FormGroup;
   rememberMe: boolean = false;
   errore: string = '';
@@ -40,13 +40,13 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private loginService: LoginService,
+    private authService: AuthService,
     private route: Router
   ) {}
 
   ngOnInit() {
     this.loading = true;
-    if (this.checkStorage()) {
+    if (this.authService.isLoggedIn()) {
       this.loading = false;
       this.route.navigateByUrl('/shop/prodotti');
     }
@@ -57,14 +57,6 @@ export class LoginComponent {
     });
 
     this.loading = false;
-  }
-
-  checkStorage() {
-    return (
-      typeof window !== 'undefined' &&
-      (sessionStorage!.getItem('utente') != null ||
-        localStorage!.getItem('utente') != null)
-    );
   }
 
   get email() {
@@ -80,28 +72,19 @@ export class LoginComponent {
     this.errore = '';
 
     if (this.loginForm.valid) {
-      this.loginService.login(this.loginForm.value).subscribe({
+      this.authService.login(this.loginForm.value).subscribe({
         next: (res: ResponseCustom) => {
-          localStorage.removeItem('token');
-          sessionStorage.removeItem('token');
-          localStorage.removeItem('utente');
-          sessionStorage.removeItem('utente');
+          this.authService.setUserSession(res.data);
 
-          if (this.rememberMe) {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('utente', res.data.id);
-          } else {
-            sessionStorage.setItem('token', res.data.token);
-            sessionStorage.setItem('utente', res.data.id);
+          if (!this.rememberMe) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('utente');
           }
 
-          this.rememberMe
-            ? localStorage.setItem('token', res.data.token)
-            : sessionStorage.setItem('token', res.data.token);
-
           this.loading = false;
-
-          window.location.reload();
+          console.log(res.data);
+          this.caricaUtente.emit();
+          this.route.navigateByUrl('/shop/prodotti');
         },
         error: (err: any) => {
           this.loading = false;

@@ -14,6 +14,8 @@ import { Utente } from '../../interfacce/utente';
 import { UtenteService } from '../../servizi/utente.service';
 import { ElementiCarrelloService } from '../../servizi/elementi-carrello.service';
 import { ToastModule } from 'primeng/toast';
+import { AuthService } from '../../servizi/auth.service';
+import { Carrello } from '../../interfacce/carrello';
 
 @Component({
   selector: 'app-shop-prodotti',
@@ -42,19 +44,18 @@ export class ShopProdottiComponent implements OnInit {
     private prodottoService: ProdottoService,
     private baseService: BaseService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private authService: AuthService,
     private route: Router,
     private elementiCarrelloService: ElementiCarrelloService
   ) {}
 
   ngOnInit(): void {
-    this.caricamento = true
+    this.caricamento = true;
     this.baseUrl = this.baseService.baseUrl + '/immagini';
     this.getAllProdotti();
   }
 
   getAllProdotti() {
-
     this.prodottoService.getAll().subscribe({
       next: (res: ResponseCustom) => {
         this.prodotti = res.data;
@@ -70,10 +71,9 @@ export class ShopProdottiComponent implements OnInit {
     });
 
     this.caricamento = false;
-
   }
 
-  faiInviareMail(event: Event) {
+  /* faiInviareMail(event: Event) {
     event.stopPropagation();
 
     this.confirmationService.confirm({
@@ -81,49 +81,53 @@ export class ShopProdottiComponent implements OnInit {
         this.route.navigateByUrl('/contatti');
       },
     });
-  }
+  } */
 
   aggiungiAlCarrello(event: Event, prodotto: Prodotto) {
-
     event.stopImmediatePropagation();
 
     this.caricamento = true;
 
-    if (this.checkStorage()) {
-      this.elementiCarrelloService
-        .aggiungiElementoAlCarrello(sessionStorage.getItem('carrello'), prodotto.codice, 1)
-        .subscribe({
-          next: (res: ResponseCustom) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successo',
-              detail: res.messaggio,
-              life: 2000,
-            });
-
-            this.carrelloAggiornato.emit();
-            this.caricamento = false;
-          },
-          error: (err: any) => {
-            this.caricamento = false;
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Error',
-              detail: err.error.messaggio,
-              life: 3000,
-            });
-          }
-        });
+    if (this.authService.isLoggedIn()) {
+      this.authService.checkSessionExpiry();
+      this.aggiungiProdottoAlCarrello(prodotto);
     } else {
       this.route.navigateByUrl('/shop/accedi');
     }
   }
 
-  checkStorage() {
-    return (
-      typeof window !== 'undefined' &&
-      (sessionStorage!.getItem('utente') != null ||
-        localStorage!.getItem('utente') != null)
-    );
+  aggiungiProdottoAlCarrello(prodotto: Prodotto) {
+    var utente: Utente =
+      JSON.parse(sessionStorage.getItem('utente')!) ||
+      JSON.parse(localStorage.getItem('utente')!);
+
+    this.elementiCarrelloService
+      .aggiungiElementoAlCarrello(utente.carrello.id, prodotto.codice, 1)
+      .subscribe({
+        next: (res: ResponseCustom) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: res.messaggio,
+            life: 2000,
+          });
+
+          utente.carrello = res.data;
+          sessionStorage.setItem('utente', JSON.stringify(utente));
+          localStorage.setItem('utente', JSON.stringify(utente));
+
+          this.carrelloAggiornato.emit();
+          this.caricamento = false;
+        },
+        error: (err: any) => {
+          this.caricamento = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.messaggio,
+            life: 3000,
+          });
+        },
+      });
   }
 }

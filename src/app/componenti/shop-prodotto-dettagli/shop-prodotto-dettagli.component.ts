@@ -17,6 +17,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { LineBreakPipe } from '../../servizi/line-break.pipe';
+import { AuthService } from '../../servizi/auth.service';
+import { Utente } from '../../interfacce/utente';
 
 @Component({
   selector: 'app-shop-prodotto-dettagli',
@@ -32,7 +34,7 @@ import { LineBreakPipe } from '../../servizi/line-break.pipe';
     InputNumberModule,
     FormsModule,
     ToastModule,
-    LineBreakPipe
+    LineBreakPipe,
   ],
   providers: [MessageService],
   templateUrl: './shop-prodotto-dettagli.component.html',
@@ -55,7 +57,8 @@ export class ShopProdottoDettagliComponent {
     private router: Router,
     private titleService: Title,
     private metaService: Meta,
-    private elementiCarrelloService: ElementiCarrelloService
+    private elementiCarrelloService: ElementiCarrelloService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -121,28 +124,45 @@ export class ShopProdottoDettagliComponent {
   aggiungiAlCarrello(event: Event) {
     event.stopImmediatePropagation();
 
-    if (this.checkStorage()) {
-      this.elementiCarrelloService
-        .aggiungiElementoAlCarrello(
-          sessionStorage.getItem('carrello'),
-          this.prodotto.codice,
-          this.quantita
-        )
-        .subscribe({
-          next: (res: ResponseCustom) => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Successo',
-              detail: res.messaggio,
-              life: 2000,
-            });
 
-            this.carrelloAggiornato.emit();
-            this.quantita = 1;
-          },
-        });
+    if (this.authService.isLoggedIn()) {
+      this.aggiungiProdottoAlCarrello(this.prodotto);
     } else {
       this.router.navigateByUrl('/shop/accedi');
     }
+  }
+
+  aggiungiProdottoAlCarrello(prodotto: Prodotto) {
+    var utente: Utente =
+      JSON.parse(sessionStorage.getItem('utente')!) ||
+      JSON.parse(localStorage.getItem('utente')!);
+
+    this.elementiCarrelloService
+      .aggiungiElementoAlCarrello(utente.carrello.id, prodotto.codice, 1)
+      .subscribe({
+        next: (res: ResponseCustom) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Successo',
+            detail: res.messaggio,
+            life: 2000,
+          });
+
+          utente.carrello = res.data;
+          sessionStorage.setItem('utente', JSON.stringify(utente));
+          localStorage.setItem('utente', JSON.stringify(utente));
+
+          this.carrelloAggiornato.emit();
+        },
+        error: (err: any) => {
+
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.messaggio,
+            life: 3000,
+          });
+        },
+      });
   }
 }
